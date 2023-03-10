@@ -11,7 +11,7 @@ export default function Author({author}){
                 <i className="edit icon text-primary"></i> | <i className="trash alternate icon text-danger"></i>
             </td>
             <td>
-                <i class="info circle icon"></i>
+                <i class="info circle icon"></i>View More
             </td>
         </tr>
     </>

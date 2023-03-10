@@ -9,7 +9,7 @@ export default function AuthorsForm({onAddAuthor}){
         <form className="ui small form p-2" onSubmit={onFormSubmit} method="POST">
             <h4 className="ui dividing header text-primary">Personal Information</h4>
             <div className="field">
-                <div className="three fields">
+                <div className="five fields">
                     <div className="field">
                         <label >First Name</label>
                         <input type="text" name="first_name" placeholder="First Name" required/>
@@ -25,11 +25,7 @@ export default function AuthorsForm({onAddAuthor}){
                             <option value="BTECH">BTECH</option>
                         </select>
                     </div>
-                </div>
-            </div>
-            <div className="field">
-                <div className="two fields">
-                    <div className="field">
+                   <div className="field">
                         <label>Email</label>
                         <input type="email" name="email" placeholder="abc@gmail.com" required/>
                     </div>

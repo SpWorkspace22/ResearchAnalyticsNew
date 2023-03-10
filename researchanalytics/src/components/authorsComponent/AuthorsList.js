@@ -24,7 +24,7 @@ export default function AuthorsList({authorsCollection}){
             <div className="ui form small mb-1">
                 <div className="field">
                     <label>Email</label>
-                    <div className="two fields">
+                    <div className="three fields">
                         <div className="field">
                             <input type="email" name="searchEmail" placeholder="a@gmail.com"
                             value={email}
@@ -34,6 +34,12 @@ export default function AuthorsList({authorsCollection}){
                             <button type="button" className="ui primary button"
                             onClick={onSearchClick}>Search</button>
                         </div> 
+                        <div className="field">
+                            <button type="button" 
+                            className="ui right floated circular icon button">
+                                <i class="sync alternate icon"></i>
+                            </button>
+                        </div>                         
                     </div>
                 </div>
             </div>
