@@ -14,21 +14,39 @@ authorOp = None
 
 
 # authors routers 
+
+# Save,Update and Get All Authors
 @app.route("/authors",methods=['POST','GET'])
 def getAuthors():
 	if request.method=='POST':
 		data = json.loads(request.data)
-		result = authorOp.saveAuthor(data["first_name"],data["last_name"],data["email"],data["phone"])
-		
-		return result
+
+		if(data["author_id"]!=""):
+			result = authorOp.updateAuthor(data["author_id"],data["first_name"],data["last_name"],data["email"],data["phone"])
+			return jsonify(result)
+		else:
+			result = authorOp.saveAuthor(data["first_name"],data["last_name"],data["email"],data["phone"])
+			return jsonify(result)
 	else:
+		authors = authorOp.getAllAuthors()
 		return jsonify(authors)
 
+#RemoveAuthor
+@app.route("/authors/remove",methods=["DELETE"])
+def removeAuthor():
+	result = authorOp.removeAuthor(request.args['author_id'])
+	return result
+
+
 if __name__ == '__main__':
-	dbSetup = DatabaseSetup()  # creating Databse Setup Object 
-	connection = dbSetup.getConnection("localhost",3306,"root","root","researchanalytics") # establishing connection
-	
-	authorOp = AuthorOperation(connection) # initializing AuthorOperation with eatblished conbnection
+	# creating Databse Setup Object 
+	dbSetup = DatabaseSetup()  
+
+	# establishing connection
+	connection = dbSetup.getConnection("localhost",3306,"root","root","researchanalytics") 
+
+	# initializing AuthorOperation with eatblished conbnection
+	authorOp = AuthorOperation(connection) 
 	
 	app.run(debug = True)  
 
