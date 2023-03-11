@@ -1,13 +1,42 @@
 import Author from "./Author";
 import "./Author.css"
+import axios from 'axios'
 
 import React, { useEffect, useState } from 'react';
 
 export default function AuthorsList({authorsCollection}){
     const [email,setEmail] = useState("");
-    let [authors,setAuthors] = useState([...authorsCollection]);
+    let [authors,setAuthors] = useState([]);
 
+    useEffect(()=>{
+        axios.get('http://127.0.0.1:5000/authors')
+        .then(function (response) {
+            // handle success
+            setAuthors([...response.data])
+        })
+        .catch(function (error) {
+            // handle error
+            console.log(error);
+        })
+        .finally(function () {
+            // always executed
+        });
+    },[])
 
+    function onLoadData(){
+        axios.get('http://127.0.0.1:5000/authors')
+        .then(function (response) {
+            // handle success
+            setAuthors([...response.data])
+        })
+        .catch(function (error) {
+            // handle error
+            console.log(error);
+        })
+        .finally(function () {
+            // always executed
+        });
+    }
     function onSearchClick(e){
         if(email===""){
             setAuthors([...authorsCollection]);
@@ -35,7 +64,7 @@ export default function AuthorsList({authorsCollection}){
                             onClick={onSearchClick}>Search</button>
                         </div> 
                         <div className="field">
-                            <button type="button" 
+                            <button type="button" onClick={onLoadData}
                             className="ui right floated circular icon button">
                                 <i class="sync alternate icon"></i>
                             </button>

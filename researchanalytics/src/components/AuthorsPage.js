@@ -21,9 +21,9 @@ export default function AuthorsPage(){
 
     return (
         <div className="mx-5 mt-2">
-            <AuthorsForm  onAddAuthor={onAddAuthor}/>
+            <AuthorsForm  />
             <div className="ui horizontal divider">Author List</div>
-            <AuthorsList authorsCollection={authorsList}/>
+            <AuthorsList />
         </div>
     );
 }

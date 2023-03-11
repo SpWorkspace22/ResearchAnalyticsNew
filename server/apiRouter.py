@@ -1,13 +1,15 @@
 from flask import Flask, request, json, jsonify
+from flask_cors import CORS
+
 from serverSetup import DatabaseSetup
 from authorOperations import AuthorOperation
 
 
 # creating the flask object
 app = Flask(__name__)
+CORS(app)
 
 # globa objects 
-
 dbSetup = None
 authorOp = None
 

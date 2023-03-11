@@ -1,8 +1,24 @@
-export default function AuthorsForm({onAddAuthor}){
+import axios
+ from "axios";
+export default function AuthorsForm(){
 
     function onFormSubmit(e){
         e.preventDefault();
-        //onAddAuthor(e);
+
+        let userData = {
+            author_id:"",
+            first_name:e.target.first_name.value,
+            last_name:e.target.last_name.value,
+            email:e.target.email.value,
+            phone:e.target.phone.value
+        }
+        axios.post('http://127.0.0.1:5000/authors', userData)
+        .then(function (response) {
+            console.log(response);
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
     }
 
     return (
