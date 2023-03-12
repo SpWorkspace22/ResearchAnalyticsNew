@@ -4,25 +4,12 @@ import axios from 'axios'
 
 import React, { useEffect, useState } from 'react';
 
-export default function AuthorsList({authorsCollection}){
+export default function AuthorsList({onEditPopulateForm})
+    {
     const [email,setEmail] = useState("");
     let [authors,setAuthors] = useState([]);
-
-    useEffect(()=>{
-        axios.get('http://127.0.0.1:5000/authors')
-        .then(function (response) {
-            // handle success
-            setAuthors([...response.data])
-        })
-        .catch(function (error) {
-            // handle error
-            console.log(error);
-        })
-        .finally(function () {
-            // always executed
-        });
-    },[])
-
+    
+    // Refresh List
     function onLoadData(){
         axios.get('http://127.0.0.1:5000/authors')
         .then(function (response) {
@@ -37,18 +24,47 @@ export default function AuthorsList({authorsCollection}){
             // always executed
         });
     }
+
+    function findByEmail(userEmail){
+        axios.get('http://127.0.0.1:5000/author',{ params: { email: userEmail } })
+        .then(function (response) {
+            // handle success
+            console.log(response)
+            setAuthors([...response.data])
+            
+        })
+        .catch(function (error) {
+            // handle error
+            console.log(error);
+        })
+    }
+    //filter user on current list
     function onSearchClick(e){
         if(email===""){
-            setAuthors([...authorsCollection]);
+            onLoadData();
         }else{
-            authors = authorsCollection.filter((a)=>{
-                return a.email===email;
-            })
-            setAuthors(authors)
+            findByEmail(email)
         }  
     }
 
-    return  (
+    function onEditClick(author){
+        onEditPopulateForm(author)
+    }
+
+    function onRemoveAuthor(author_id){
+        axios.delete('http://127.0.0.1:5000/authors/remove',
+        { params: { author_id: author_id } })
+        .then(function (response) {
+            // handle success
+            onLoadData();
+        })
+        .catch(function (error) {
+            // handle error
+            console.log(error);
+        })
+    }
+
+    return (
         <>
             <div className="ui form small mb-1">
                 <div className="field">
@@ -66,7 +82,7 @@ export default function AuthorsList({authorsCollection}){
                         <div className="field">
                             <button type="button" onClick={onLoadData}
                             className="ui right floated circular icon button">
-                                <i class="sync alternate icon"></i>
+                                <i className="sync alternate icon"></i>
                             </button>
                         </div>                         
                     </div>
@@ -87,7 +103,8 @@ export default function AuthorsList({authorsCollection}){
             <tbody>
 				{
                     authors.map((a)=> 
-                        <Author author={a} key={a.author_id}/>
+                        <Author key={a.author_id} author={a} 
+                        onEditClick={onEditClick} onDeleteClick={onRemoveAuthor}/>
                     )}
             </tbody>
             </table>

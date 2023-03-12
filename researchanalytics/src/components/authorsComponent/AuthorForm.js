@@ -1,38 +1,49 @@
 import axios
  from "axios";
-export default function AuthorsForm(){
+import { useEffect, useState } from "react";
+export default function AuthorsForm({author,onSubmitAuthor,setAuthorForm}){
+    let [user,setUser] = useState({...author})
 
     function onFormSubmit(e){
         e.preventDefault();
-
-        let userData = {
-            author_id:"",
-            first_name:e.target.first_name.value,
-            last_name:e.target.last_name.value,
-            email:e.target.email.value,
-            phone:e.target.phone.value
-        }
-        axios.post('http://127.0.0.1:5000/authors', userData)
-        .then(function (response) {
-            console.log(response);
-        })
-        .catch(function (error) {
-            console.log(error);
-        });
+        onSubmitAuthor(e);
     }
+
+    useEffect(()=>{
+        setUser({...author})
+    },[author])
+
 
     return (
         <form className="ui small form p-2" onSubmit={onFormSubmit} method="POST">
             <h4 className="ui dividing header text-primary">Personal Information</h4>
             <div className="field">
-                <div className="five fields">
+                <div className="six fields">
+                    <div className="field">
+                        <label >Author Id</label>
+                        <input type="text" name="author_id" 
+                            onChange={(e)=>{
+                                setAuthorForm(Object.assign(author, { author_id: e.target.value }))
+                            }}
+                            value={user.author_id} placeholder="" readOnly/>
+                    </div>
                     <div className="field">
                         <label >First Name</label>
-                        <input type="text" name="first_name" placeholder="First Name" required/>
+                        <input type="text" name="first_name" 
+                           value={user.first_name} 
+                           onChange={(e)=>{
+                            setAuthorForm(Object.assign(user, { first_name: e.target.value }))
+                            }}
+                           placeholder="First Name" required/>
                     </div>
                     <div className="field">
                         <label>Last Name</label>
-                        <input type="text" name="last_name" placeholder="Last Name" required/>
+                        <input type="text" name="last_name" 
+                            value={user.last_name} 
+                            onChange={(e)=>{
+                                setAuthorForm(Object.assign(user, { last_name: e.target.value }))
+                            }}
+                            placeholder="Last Name" required/>
                     </div>
                     <div className="field">
                         <label>Department</label>
@@ -43,11 +54,21 @@ export default function AuthorsForm(){
                     </div>
                    <div className="field">
                         <label>Email</label>
-                        <input type="email" name="email" placeholder="abc@gmail.com" required/>
+                        <input type="email" name="email" 
+                            onChange={(e)=>{
+                                setAuthorForm(Object.assign(user, { email: e.target.value }))
+                            }}
+                            value={user.email} placeholder="abc@gmail.com" required/>
                     </div>
                     <div className="field">
                         <label>Phone Number</label>
-                        <input type="text" name="phone" placeholder="1234567890" />
+                        <input type="tel" name="phone" 
+                        pattern="[0-9]{10}"
+                        value={user.phone}
+                        onChange={(e)=>{
+                            setAuthorForm(Object.assign(user, { phone: e.target.value }))
+                        }}
+                        placeholder="Enter 10 Digit" />
                     </div>
                 </div>
             </div>
