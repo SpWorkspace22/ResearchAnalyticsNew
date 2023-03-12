@@ -61,13 +61,21 @@ class AuthorOperation:
 	# search author by email
 	def getAuthorByEmail(self,email):
 		try:
+			authors = []
+			keys = ('author_id','first_name','last_name','email','phone')
 			sql = "select * from author where email = %s"
 			val = (email,)
 			self.cursor.execute(sql,val)
 			
 			author = self.cursor.fetchone()
+
+			if(author==None):
+				return []
+
+			authors.append(dict(zip(keys,author)))
+			print(authors)
 			
-			return author
+			return authors
 			
 		except Exception as e:
 			print(e)

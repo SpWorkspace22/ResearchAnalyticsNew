@@ -22,7 +22,7 @@ authorOp = None
 def getAuthors():
 	if request.method=='POST':
 		data = json.loads(request.data)
-
+		print(data)
 		if(data["author_id"]!=""):
 			result = authorOp.updateAuthor(data["author_id"],data["first_name"],data["last_name"],data["email"],data["phone"])
 			return jsonify(result)
@@ -32,6 +32,12 @@ def getAuthors():
 	else:
 		authors = authorOp.getAllAuthors()
 		return jsonify(authors)
+
+#Get Author By email
+@app.route("/author",methods=["GET"])
+def getAuthorUsingEmail():
+	result = authorOp.getAuthorByEmail(request.args['email'])
+	return jsonify(result)
 
 #RemoveAuthor
 @app.route("/authors/remove",methods=["DELETE"])
