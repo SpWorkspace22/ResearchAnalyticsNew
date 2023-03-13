@@ -3,11 +3,24 @@ import axios
 import { useEffect, useState } from "react";
 export default function AuthorsForm({author,onSubmitAuthor,setAuthorForm}){
     let [user,setUser] = useState({...author})
+    let [departments,setDepartments] = useState([])
 
     function onFormSubmit(e){
         e.preventDefault();
         onSubmitAuthor(e);
     }
+
+    useEffect(()=>{
+        axios.get('http://127.0.0.1:5000/depart',)
+        .then(function (response) {
+            // handle success
+            setDepartments([...response.data])
+        })
+        .catch(function (error) {
+            // handle error
+            console.log(error);
+        })
+    },[])  
 
     useEffect(()=>{
         setUser({...author})
@@ -47,9 +60,16 @@ export default function AuthorsForm({author,onSubmitAuthor,setAuthorForm}){
                     </div>
                     <div className="field">
                         <label>Department</label>
-                        <select className="ui fluid dropdown" required>
-                            <option value="MCA">MCA</option>
-                            <option value="BTECH">BTECH</option>
+                        <select className="ui fluid dropdown" name="depart" required>
+                            {
+                                departments.map((department)=>{
+                                    return (
+                                        <option value={department.department_id}>
+                                            {department.department_name}
+                                        </option>
+                                    );
+                                })
+                            }
                         </select>
                     </div>
                    <div className="field">

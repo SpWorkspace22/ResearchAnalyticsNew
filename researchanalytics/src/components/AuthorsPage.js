@@ -10,6 +10,7 @@ export default function AuthorsPage(){
         author_id:"",
         first_name:"",
         last_name:"",
+        depart_name:"",
         email:"",
         phone:""
     })
@@ -19,14 +20,15 @@ export default function AuthorsPage(){
         setAuthorForm({...author})
     }
 
-    function onSubmitAuthor(){
-        console.log(authorForm)
-        axios.post('http://127.0.0.1:5000/authors', authorForm)
+    function onSubmitAuthor(e){
+        let author = {...authorForm,depart_name:e.target.depart.value}
+        axios.post('http://127.0.0.1:5000/authors', author)
         .then(function (response) {
             setAuthorForm({
                 author_id:"",
                 first_name:"",
                 last_name:"",
+                depart_name:"",
                 email:"",
                 phone:""
             })
