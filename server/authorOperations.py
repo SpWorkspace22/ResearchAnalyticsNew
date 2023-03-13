@@ -7,14 +7,15 @@ class AuthorOperation:
 		self.cursor = self.db.cursor()
 
 	# Insert Author if it does not exist , Email id unique constraint
-	def saveAuthor(self,first_name,last_name,email,phone):
+	def saveAuthor(self,first_name,last_name,email,phone,department_id):
 		try:
 		
 			if(self.getAuthorByEmail(email)!=None):
 				return {"status":500,"message":"Duplicate email"}
 			else:
-				sql = "INSERT INTO author (first_name,last_name,email,phone) VALUES (%s, %s,%s, %s)"
-				val = (first_name,last_name,email,phone)
+				sql = '''INSERT INTO author (first_name,last_name,email,phone,department_id) 
+						VALUES (%s, %s,%s, %s,%s)'''
+				val = (first_name,last_name,email,phone,department_id)
 				self.cursor.execute(sql, val)
 				self.db.commit()
 				
@@ -24,15 +25,15 @@ class AuthorOperation:
 			return {"status":500,"message":"Server Error"}
 			
 	#update author 
-	def updateAuthor(self,author_id,first_name,last_name,email,phone):
+	def updateAuthor(self,author_id,first_name,last_name,email,phone,department_id):
 		try:
-			sql = '''update author set first_name=%s, last_name=%s, email=%s, phone=%s
-					where author_id=%s'''
-			val = (first_name,last_name,email,phone,author_id)
+			sql = '''update author set first_name=%s, last_name=%s, email=%s, phone=%s,
+					department_id=%s where author_id=%s'''
+			val = (first_name,last_name,email,phone,department_id,author_id)
 
 			
 			if(self.getAuthorByEmail(email)==None 
-      			or self.isDiff(author_id,first_name,last_name,phone)):
+      			or self.isDiff(author_id,first_name,last_name,phone,department_id)):
 				rowcount = self.cursor.execute(sql,val)
 				self.db.commit()
 				return {"status":200,"message":"Author Updated"}
@@ -46,7 +47,7 @@ class AuthorOperation:
 	def getAllAuthors(self):
 		try:
 			authors = []
-			keys = ('author_id','first_name','last_name','email','phone')
+			keys = ('author_id','first_name','last_name','email','phone','department_id')
 
 			self.cursor.execute("select * from author")
 			
@@ -62,7 +63,7 @@ class AuthorOperation:
 	def getAuthorByEmail(self,email):
 		try:
 			authors = []
-			keys = ('author_id','first_name','last_name','email','phone')
+			keys = ('author_id','first_name','last_name','email','phone','department_id')
 			sql = "select * from author where email = %s"
 			val = (email,)
 			self.cursor.execute(sql,val)
@@ -115,8 +116,8 @@ class AuthorOperation:
 
 
 	# check if there is any change in field value from the last value
-	def isDiff(self,author_id,first_name,last_name,phone):
-		sql = " select first_name,last_name,phone from author where author_id = %s"
+	def isDiff(self,author_id,first_name,last_name,phone,department_id):
+		sql = " select first_name,last_name,phone,department_id from author where author_id = %s"
 		val = (author_id,)
 		
 		
@@ -128,6 +129,8 @@ class AuthorOperation:
 		if(author[1]!=last_name):
 			return True
 		if(author[2]!=phone):
+			return True
+		if(author[3]!=department_id):
 			return True
 		
 		return False
