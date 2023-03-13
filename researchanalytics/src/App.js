@@ -11,7 +11,7 @@ export default function App() {
       <BrowserRouter>
         <HeadNavbar />
         <div className="ui grid mt-1" style={{height:"100vh"}}>
-          <div className="two wide column">
+          <div className="two wide column border-end shadow">
             <SideNavBar />
           </div>
           <div className="fourteen wide column">

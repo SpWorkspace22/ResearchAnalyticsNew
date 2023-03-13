@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 export default function SideNavBar(){
     return(
         <>
-        <div className="ui secondary vertical menu ms-1">
+        <div className="ui secondary vertical fluid menu ms-1">
             <div>
                 <a className="item" > 
                     <Link to="/dashboard" className="text-dark">

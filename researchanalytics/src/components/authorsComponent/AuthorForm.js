@@ -64,8 +64,11 @@ export default function AuthorsForm({author,onSubmitAuthor,setAuthorForm}){
                             {
                                 departments.map((department)=>{
                                     return (
-                                        <option value={department.department_id}>
-                                            {department.department_name}
+                                        <option 
+                                            value={department.department_id} 
+                                            selected={department.department_id===user.department_id?true:false}
+                                        >
+                                        {department.department_name}
                                         </option>
                                     );
                                 })
@@ -94,7 +97,7 @@ export default function AuthorsForm({author,onSubmitAuthor,setAuthorForm}){
             </div>
             <h4 className="ui dividing header text-primary">Platform Details</h4>
             <div className="field">
-                <div className="two fields">
+                <div className="four fields">
                     <div className="field">
                         <label>Scopus Id</label>
                         <input type="text" name="scopusId" placeholder="1234"/>

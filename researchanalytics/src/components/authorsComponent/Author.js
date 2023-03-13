@@ -8,11 +8,9 @@ export default function Author({author,onEditClick,onDeleteClick}){
             <td>{author.phone}</td>
             <td>{author.department_id}</td>
             <td>
-                <i className="edit icon text-primary" onClick={()=>onEditClick(author)}></i> 
-                |<i className="trash alternate icon text-danger" onClick={()=>{onDeleteClick(author.author_id)}}></i>
-            </td>
-            <td>
-                <i class="info circle icon"></i>View More
+                  <i className="edit icon text-primary" onClick={()=>onEditClick(author)}></i> 
+                | <i className="trash alternate icon text-danger" onClick={()=>{onDeleteClick(author.author_id)}}></i>
+                | <i class="info circle icon"></i>View More
             </td>
         </tr>
     </>

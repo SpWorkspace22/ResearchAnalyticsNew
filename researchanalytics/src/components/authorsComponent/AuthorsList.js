@@ -97,7 +97,6 @@ export default function AuthorsList({onEditPopulateForm})
                     <th>Phone</th>
                     <th>Department</th>
                     <th>Action</th>
-                    <th>See More</th>
                 </tr>
             </thead>
             <tbody>
