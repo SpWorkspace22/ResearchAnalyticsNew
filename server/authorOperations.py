@@ -9,16 +9,17 @@ class AuthorOperation:
 	# Insert Author if it does not exist , Email id unique constraint
 	def saveAuthor(self,first_name,last_name,email,phone,department_id):
 		try:
-		
-			if(self.getAuthorByEmail(email)!=None):
+			
+			if(self.getAuthorByEmail(email)!=[]):
 				return {"status":500,"message":"Duplicate email"}
 			else:
-				sql = '''INSERT INTO author (first_name,last_name,email,phone,department_id) 
-						VALUES (%s, %s,%s, %s,%s)'''
+				sql = '''INSERT INTO author(first_name,last_name,email,phone,department_id) 
+						VALUES(%s, %s,%s, %s,%s)'''
 				val = (first_name,last_name,email,phone,department_id)
 				self.cursor.execute(sql, val)
 				self.db.commit()
 				
+				print("success")
 				return {"status":200,"message":"Author Saved"}
 		except Exception as e:
 			print(e)

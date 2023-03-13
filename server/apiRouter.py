@@ -22,8 +22,8 @@ departOp = None
 def processAuthors():
 	if request.method=='POST':
 		data = json.loads(request.data)
+		
 		if(data["author_id"]!=""):
-			print(data["depart_name"])
 			result = authorOp.updateAuthor(
 				data["author_id"],data["first_name"],data["last_name"],data["email"],data["phone"],
 				data["depart_name"]
@@ -31,10 +31,12 @@ def processAuthors():
 
 			return jsonify(result)
 		else:
+			
 			result = authorOp.saveAuthor(
 				data["first_name"],data["last_name"],data["email"],data["phone"],
 				data["depart_name"]
 			)
+			print(result)
 			return jsonify(result)
 	else:
 		authors = authorOp.getAllAuthors()
