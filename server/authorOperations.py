@@ -19,11 +19,11 @@ class AuthorOperation:
 				self.cursor.execute(sql, val)
 				self.db.commit()
 				
-				print("success")
-				return {"status":200,"message":"Author Saved"}
+				return self.cursor.rowcount
+				
 		except Exception as e:
 			print(e)
-			return {"status":500,"message":"Server Error"}
+			return -1
 			
 	#update author 
 	def updateAuthor(self,author_id,first_name,last_name,email,phone,department_id):
@@ -31,18 +31,17 @@ class AuthorOperation:
 			sql = '''update author set first_name=%s, last_name=%s, email=%s, phone=%s,
 					department_id=%s where author_id=%s'''
 			val = (first_name,last_name,email,phone,department_id,author_id)
-
+				
 			
-			if(self.getAuthorByEmail(email)==None 
-      			or self.isDiff(author_id,first_name,last_name,phone,department_id)):
+			if(self.getAuthorByEmail(email)==None or self.isDiff(author_id,first_name,last_name,phone,department_id)):
 				rowcount = self.cursor.execute(sql,val)
 				self.db.commit()
-				return {"status":200,"message":"Author Updated"}
+				return self.cursor.rowcount
 			else:
-				return {"status":500,"message":"Duplicate email"}
+				return 0
 		except Exception as e:
 			print(e)
-			return {"status":500,"message":"Server Error"}
+			return -1
 		
 	# list all authors
 	def getAllAuthors(self):
@@ -75,7 +74,6 @@ class AuthorOperation:
 				return []
 
 			authors.append(dict(zip(keys,author)))
-			print(authors)
 			
 			return authors
 			
@@ -91,7 +89,6 @@ class AuthorOperation:
 			self.cursor.execute(sql,val)
 			
 			author = self.cursor.fetchone()
-			print(author)
 			
 			return author
 			
