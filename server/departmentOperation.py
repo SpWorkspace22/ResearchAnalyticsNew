@@ -15,16 +15,16 @@ class DepartmentOperation:
 			self.cursor.execute(sql,val)
 			
 			if(self.cursor.fetchone()!=None):
-				return {"status":500,"message":"Duplicate department name"}
+				return {"status":500,"message":"Duplicate department name","Error":""}
 			else:
 				sql = "INSERT INTO department(department_name) VALUES (%s)"
 				self.cursor.execute(sql, val)
 				self.db.commit()
 				
-				return {"status":200,"message":"Department Saved"}
+				return {"status":200,"message":"Department Saved","Error":""}
 		except Exception as e:
 			print(e)
-			return {"status":500,"message":"Server Error"}
+			return {"status":500,"message":"","Error":"Server Error"}
 			
 		
 	# get all deparments
@@ -45,6 +45,6 @@ class DepartmentOperation:
 		except:
 			print(x)
 			
-			return {"status":500,"message":"Server Error"}
+			return {"status":500,"message":"","Error":"Server Error"}
 			
 			

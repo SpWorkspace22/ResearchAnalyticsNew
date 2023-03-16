@@ -13,6 +13,32 @@ class PlatFormOperations:
 		pass
 		
 		
+		
+	def getAuthorPlatformById(self,author_id):
+		platforms = {}
+		try:
+			
+			keys = ('platform_code','platform_id')
+			
+			sql = "select platform_code,platform_id from author_platform where author_id=%s"
+			val = (author_id,)
+			
+			self.cursor.execute(sql,val)
+			
+			platform = self.cursor.fetchall()
+			
+			if platform==None:
+				return platforms
+			
+			for plat in platform:
+				platforms[plat[0]]=plat[1]
+			
+			return platforms
+			
+		except Exception as e:
+			print(e)
+			return platforms
+			
 	def getAuthorPlatformData(self,author_id,platform_code):
 		try:
 			
@@ -34,7 +60,7 @@ class PlatFormOperations:
 			
 		except Exception as e:
 			print(e)
-			return 0
+			return -1
 		
 	def saveAuthorPlatformData(self,author_id,platform_code,platform_id):
 		print(platform_id)
@@ -49,12 +75,11 @@ class PlatFormOperations:
 			
 		except Exception as e:
 			print(e)
-			return 0
+			return -1
 			
 			
 	def updateAuthorPlatformData(self,author_id,platform_code,platform_id):
 		
-		print(author_id,platform_code,platform_id)
 		try:
 			sql = "update author_platform set platform_id=%s where author_id=%s and platform_code=%s"
 			val = (platform_id,author_id,platform_code)
@@ -66,4 +91,4 @@ class PlatFormOperations:
 			
 		except Exception as e:
 			print(e)
-			return 0
+			return -1
