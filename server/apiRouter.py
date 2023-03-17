@@ -44,7 +44,8 @@ def processAuthors():
 @app.route("/author",methods=["GET"])
 def getAuthorUsingEmail():
 	result = helper.getAllAuthorsData(request.args['email'])
-
+	
+	print(result)
 	return jsonify(result)
 
 #RemoveAuthor

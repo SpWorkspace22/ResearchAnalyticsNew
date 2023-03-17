@@ -12,7 +12,11 @@ export default function AuthorsPage(){
         last_name:"",
         depart_name:"",
         email:"",
-        phone:""
+        phone:"",
+        platform_data:{
+        GS:"",
+        SC:""
+    }
     })
     
     //Populate Form with author data
@@ -30,7 +34,11 @@ export default function AuthorsPage(){
                 last_name:"",
                 depart_name:"",
                 email:"",
-                phone:""
+                phone:"",
+                platform_data:{
+                    GS:"",
+                    SC:""
+                }
             })
             console.log(response)
         })

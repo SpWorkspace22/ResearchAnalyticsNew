@@ -62,9 +62,11 @@ class AuthorOperation:
 	def getAuthorByEmail(self,email):
 		try:
 			authors = []
-			keys = ('author_id','first_name','last_name','email','phone','department_id')
-			sql = "select * from author where email = %s"
+			keys = ('author_id','first_name','last_name','email','phone','department_id','depart_name')
+			
+			sql = "select author_id,first_name,last_name,email,phone,a.department_id,department_name  from author a, department d where a.department_id=d.deparment_id and a.email=%s"
 			val = (email,)
+			
 			self.cursor.execute(sql,val)
 			
 			author = self.cursor.fetchone()

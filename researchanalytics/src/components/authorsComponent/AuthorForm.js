@@ -5,6 +5,7 @@ export default function AuthorsForm({author,onSubmitAuthor,setAuthorForm}){
     let [user,setUser] = useState({...author})
     let [departments,setDepartments] = useState([])
 
+    console.log(author)
     function onFormSubmit(e){
         e.preventDefault();
         onSubmitAuthor(e);
@@ -100,11 +101,23 @@ export default function AuthorsForm({author,onSubmitAuthor,setAuthorForm}){
                 <div className="four fields">
                     <div className="field">
                         <label>Scopus Id</label>
-                        <input type="text" name="scopusId" placeholder="1234"/>
+                        <input type="text" name="scopusId"
+                        value={user.platform_data.SC} 
+                        onChange={(e)=>{
+                            setAuthorForm({...user,platform_data:{...user.platform_data,SC:e.target.value}})
+                            }
+                        }
+                        placeholder="1234"/>
                     </div>
                     <div className="field">
                         <label>Google Scholar Id</label>
-                        <input type="text" name="scholarId" placeholder="1234"/>
+                        <input type="text" name="scholarId" 
+                        value={user.platform_data.GS} 
+                        onChange={(e)=>{
+                            setAuthorForm({...user,platform_data:{...user.platform_data,GS:e.target.value}})
+                            }
+                        }
+                        placeholder="1234"/>
                     </div> 
                 </div>
             </div>
