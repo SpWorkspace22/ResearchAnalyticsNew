@@ -14,6 +14,7 @@ export default function AuthorsList({onEditPopulateForm})
         axios.get('http://127.0.0.1:5000/authors')
         .then(function (response) {
             // handle success
+            console.log(response)
             setAuthors([...response.data])
         })
         .catch(function (error) {

@@ -1,11 +1,13 @@
-import "./uploadAuthor.css"
 import { read, utils, writeFile } from 'xlsx';
 import axios from 'axios';
 
 import { useState } from "react";
+import AuthorCheck from "./authorCheck";
+import UploadLog from "./uploadLog";
 
 export default function AuthorUpload(){
     const [authorsData,setAuthors] = useState({authors:[],error:""})
+    const [response,setResponse] = useState([])
 
     function handleImport(e){
         const files = e.target.files;
@@ -67,6 +69,7 @@ export default function AuthorUpload(){
         .then(function (response) {
             // handle success
             console.log(response)
+            setResponse([...response.data])
         })
         .catch(function (error) {
             // handle error
@@ -92,41 +95,17 @@ export default function AuthorUpload(){
                     disabled={ authorsData.authors.length==0 ? true : false}>Upload</button>
                 </div>
             </div>
-            <table className="ui single selectable green line table attached small mt-3">
-            <thead>
-                <tr>
-                    <th>First Name</th>
-                    <th>Last Name</th>
-                    <th>Email</th>
-                    <th>Phone</th>
-                    <th>Department</th>
-                    <th>GS</th>
-                    <th>SC</th>
-                </tr>
-            </thead>
-            <tbody>
-                {
-                    authorsData.error ? 
-                        <div className="alert alert-danger mt-3" role="alert">
-                            {authorsData.error}
-                        </div>
-                         :
-                    authorsData.authors.map((author)=>{
-                        return (
-                            <tr>
-                                <td>{author.first_name}</td>
-                                <td>{author.last_name}</td>
-                                <td>{author.email}</td>
-                                <td>{author.phone}</td>
-                                <td>{author.depart_name}</td>
-                                <td>{author.platform_data.GS}</td>
-                                <td>{author.platform_data.SC}</td>
-                            </tr>
-                        );
-                    })
-                }
-            </tbody>
-            </table>
+
+            {
+                response.length!=0 ? 
+                <UploadLog responses={response}/> : 
+                authorsData.error ? 
+                <div class="alert alert-danger" role="alert">
+                    {authorsData.error}
+                </div>
+                :
+                <AuthorCheck authors={authorsData.authors} />
+            }
         </div>
     );
 }

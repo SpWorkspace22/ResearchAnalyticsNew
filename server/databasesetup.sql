@@ -17,9 +17,8 @@ insert into department(department_name) values("MTECH");
 insert into platform values("GS","google scholar");
 insert into platform values("SC","scopus");
 
-select * from author;
-select * from author_platform;
 
+flush table author;
 
 delete from author_platform;
 delete from author;

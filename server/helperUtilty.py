@@ -45,7 +45,7 @@ class HelperUtility:
 			
 		elif(rowInserted==0):
 		
-			result = {"status":200,"message":"Duplicate Email","Error":""}
+			result = {"status":200,"message":"","Error":"Duplicate Email"}
 		else:
 			result = {"status":500,"message":"","Error":"Server Error"}
 				
@@ -101,9 +101,8 @@ class HelperUtility:
 			elif(rowUpdated==-1):
 				result = {"status":500,"message":"","Error":"Server Error"}
 		else:
-			result = {"status":200,"message":"Duplicate Email!, Author exists","Error":""}
+			result = {"status":200,"message":"","Error":"Duplicate Email!, Author exists"}
 			
-		print(result)
 		return result
 		
 		

@@ -23,6 +23,20 @@ export default function AuthorsForm({author,onSubmitAuthor,setAuthorForm}){
         })
     },[])  
 
+    function handleClear(){
+        setAuthorForm({
+            author_id:"",
+            first_name:"",
+            last_name:"",
+            depart_name:"",
+            email:"",
+            phone:"",
+            platform_data:{
+                    GS:"",
+                    SC:""
+            }
+        })
+    }
     useEffect(()=>{
         setUser({...author})
     },[author])
@@ -122,6 +136,8 @@ export default function AuthorsForm({author,onSubmitAuthor,setAuthorForm}){
                 </div>
             </div>
             <input type="submit" className="ui primary button large"  value="Save" />
+            <input type="button" className="ui secondary button large"  value="Clear" 
+            onClick={handleClear} />
         </form>
     );
 }

@@ -81,8 +81,8 @@ def uploadAuthors():
 			result = helper.saveAuthor(author)
 		else:
 			pass
+		
 		results.append(result)
-	
 	return jsonify(results)
 
 

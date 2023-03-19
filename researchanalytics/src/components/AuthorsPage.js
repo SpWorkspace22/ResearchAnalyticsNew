@@ -40,7 +40,7 @@ export default function AuthorsPage(){
                     SC:""
                 }
             })
-            console.log(response)
+            alert(response.data.message)
         })
         .catch(function (error) {
             console.log(error);
