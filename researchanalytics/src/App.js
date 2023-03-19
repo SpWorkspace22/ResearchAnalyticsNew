@@ -4,6 +4,7 @@ import HeadNavbar from "./components/HeadNavbar";
 import DashboardPage from "./components/DashboardPage";
 import AuthorsPage from "./components/AuthorsPage"
 import SideNavBar from './components/SideNavBar';
+import AuthorUpload from './components/utilityComponents/uploadAuthors';
 
 
 export default function App() {
@@ -20,6 +21,7 @@ export default function App() {
               <Route exact path="/" element={<DashboardPage />} />
               <Route path="/dashboard" element={<DashboardPage />} />
               <Route path="/authors" element={<AuthorsPage />} />
+              <Route path="/uploadAuth" element={<AuthorUpload />} />
             </Routes>
           </div>
       {/* // </div> */}

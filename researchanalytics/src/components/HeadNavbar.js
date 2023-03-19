@@ -30,7 +30,7 @@ export default function Navbar(){
                                 Manage Authors
                         </Link></li>
                     <li>
-                        <Link to="#" className="text-dark dropdown-item">
+                        <Link to="/uploadAuth" className="text-dark dropdown-item">
                             <i className="upload icon"></i>
                             Upload Authors
                         </Link>
