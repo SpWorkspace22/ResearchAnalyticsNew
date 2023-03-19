@@ -20,4 +20,7 @@ insert into platform values("SC","scopus");
 select * from author;
 select * from author_platform;
 
+
+delete from author_platform;
+delete from author;
 commit

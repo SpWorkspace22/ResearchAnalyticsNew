@@ -3,8 +3,8 @@ from platformOperations import PlatFormOperations
 from flask import Flask, request, json, jsonify
 class HelperUtility:
 
-	authorOp = None;
-	platOp = None;
+	authorOp = None
+	platOp = None
 	
 	
 	def __init__(self,dbConnection):
@@ -22,12 +22,12 @@ class HelperUtility:
 		result = None
 		if(rowInserted>0):
 			author = self.authorOp.getAuthorByEmail(data['email'])
-			
+
 			platform_data = data["platform_data"]
-			
+
 			for platform in platform_data.items():
 				if(platform[1]!=""):
-					if (not isAuthorPlatformDiff(author['author_id'],platform[0],platform[1])):
+					if (not self.isAuthorPlatformDiff(author[0]['author_id'],platform[0],platform[1])):
 						self.platOp.saveAuthorPlatformData(author[0]['author_id'],platform[0],platform[1])
 					else:
 						result = {
@@ -50,7 +50,7 @@ class HelperUtility:
 			result = {"status":500,"message":"","Error":"Server Error"}
 				
 			
-		return jsonify(result)
+		return result
 
 
 	def updateAuthor(self,data):
@@ -73,9 +73,7 @@ class HelperUtility:
 						
 						if(self.platOp.getAuthorPlatformData(data['author_id'],platform[0])!=None):
 							
-							print(platform)
-							if(self.isAuthorPlatformDiff(data['author_id'],platform[0],platform[1])):
-								print("update")
+							if(not self.isAuthorPlatformDiff(data['author_id'],platform[0],platform[1])):
 								self.platOp.updateAuthorPlatformData(data['author_id'],platform[0],platform[1])
 							else:
 								result = {
@@ -84,8 +82,7 @@ class HelperUtility:
 									"Error ": "Author Platform Id and Platform Code combination exists"}
 								break
 						else:
-							if(self.isAuthorPlatformDiff(data['author_id'],platform[0],platform[1])):
-								print("insert")
+							if(not self.isAuthorPlatformDiff(data['author_id'],platform[0],platform[1])):
 								self.platOp.saveAuthorPlatformData(data['author_id'],platform[0],platform[1])
 							else:
 								result = {
@@ -94,7 +91,7 @@ class HelperUtility:
 									"Error ": "Author Platform Id and Platform Code combination exists"}
 								break
 					else:
-						continue;
+						continue
 				else:
 					result = {
 								"status":200,
@@ -107,7 +104,7 @@ class HelperUtility:
 			result = {"status":200,"message":"Duplicate Email!, Author exists","Error":""}
 			
 		print(result)
-		return jsonify(result)
+		return result
 		
 		
 		
@@ -125,7 +122,7 @@ class HelperUtility:
 				authors = self.authorOp.getAuthorByEmail(email)
 				
 			if(authors==[]):
-				return jsonify([])
+				return []
 			
 			else:
 				
@@ -145,34 +142,41 @@ class HelperUtility:
 
 	# check if there is any change in field value from the last value
 	def isAuthorDiff(self,author_id,email):
+		cursor = self.db.cursor()
 		sql = " select author_id from author where email = %s"
 		val = (email,)
 		
 		
-		self.cursor.execute(sql,val)
-		author = self.cursor.fetchone()
+		cursor.execute(sql,val)
+		author = cursor.fetchone()
 
 		if(author[0]==author_id):
+			cursor.close()
 			return True
 		
+		cursor.close()
 		return False
 		
 		
 	# check if there is any change in combination of authir platform data
 	def isAuthorPlatformDiff(self,author_id,platform_code,platform_id):
-		sql = " select author_id from author_platform where platform_id=%s and platform_code=%s"
-		val = (platform_id,platform_code)
-		
-		
-		self.cursor.execute(sql,val)
-		authorP = self.cursor.fetchone()
-		
-		
-		print(authorP)
-		if(authorP==None):
-			return True
-		elif(authorP[0]==int(author_id)):
-			return True
-		else:
-			return False
-		
+		cursor = None
+		try:
+			cursor = self.db.cursor()
+			sql = " select author_id from author_platform where platform_id=%s and platform_code=%s"
+			val = (platform_id,platform_code)
+			
+			cursor.execute(sql,val)
+			authorP = cursor.fetchone()
+
+			if(authorP==None):
+				return False
+			elif(authorP[0]!=int(author_id)):
+				return True
+			else:
+				False
+		except Exception as e:
+			print(e)
+		finally:
+			if cursor!=None:
+				cursor.close()

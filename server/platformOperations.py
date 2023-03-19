@@ -2,8 +2,7 @@ class PlatFormOperations:
 
 	def __init__(self,dbConnection):
 		self.db = dbConnection
-		self.cursor = self.db.cursor()
-		
+
 		
 	def savePlaformDetails(self,platform_code,platform_name):
 		pass
@@ -15,6 +14,7 @@ class PlatFormOperations:
 		
 		
 	def getAuthorPlatformById(self,author_id):
+		cursor = self.db.cursor()
 		platforms = {}
 		try:
 			
@@ -23,9 +23,9 @@ class PlatFormOperations:
 			sql = "select platform_code,platform_id from author_platform where author_id=%s"
 			val = (author_id,)
 			
-			self.cursor.execute(sql,val)
+			cursor.execute(sql,val)
 			
-			platform = self.cursor.fetchall()
+			platform = cursor.fetchall()
 			
 			if platform==None:
 				return platforms
@@ -38,8 +38,11 @@ class PlatFormOperations:
 		except Exception as e:
 			print(e)
 			return platforms
+		finally:
+			cursor.close()
 			
 	def getAuthorPlatformData(self,author_id,platform_code):
+		cursor = self.db.cursor()
 		try:
 			
 			
@@ -48,9 +51,9 @@ class PlatFormOperations:
 			sql = "select * from author_platform where platform_code=%s and author_id=%s"
 			val = (platform_code,author_id)
 			
-			self.cursor.execute(sql,val)
+			cursor.execute(sql,val)
 			
-			platform = self.cursor.fetchone()
+			platform = cursor.fetchone()
 			
 			if platform==None:
 				{}
@@ -61,34 +64,47 @@ class PlatFormOperations:
 		except Exception as e:
 			print(e)
 			return -1
+		finally:
+			cursor.close()
 		
 	def saveAuthorPlatformData(self,author_id,platform_code,platform_id):
-		print(platform_id)
+		cursor = None
 		try:
+			cursor = self.db.cursor()
 			sql = "insert into author_platform(author_id,platform_code,platform_id) values(%s,%s,%s)"
 			val = (author_id,platform_code,platform_id)
 		
-			self.cursor.execute(sql,val)
+			cursor.execute(sql,val)
 			self.db.commit()
 			
-			return self.cursor.rowcount
+			rowcount = cursor.rowcount
+			print("Plat",rowcount)
+			return rowcount
 			
 		except Exception as e:
 			print(e)
 			return -1
+		finally:
+			if cursor!=None:
+				cursor.close()
 			
 			
 	def updateAuthorPlatformData(self,author_id,platform_code,platform_id):
-		
+		cursor = None
 		try:
+			cursor = self.db.cursor()
 			sql = "update author_platform set platform_id=%s where author_id=%s and platform_code=%s"
 			val = (platform_id,author_id,platform_code)
 			
-			self.cursor.execute(sql,val)
+			cursor.execute(sql,val)
 			self.db.commit()
 			
-			return self.cursor.rowcount
+			rowcount = cursor.rowcount
+			return rowcount
 			
 		except Exception as e:
 			print(e)
 			return -1
+		finally:
+			if cursor!=None:
+				cursor.close()

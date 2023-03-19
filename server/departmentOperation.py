@@ -3,48 +3,53 @@ class DepartmentOperation:
 
 	def __init__(self,dbConnection):
 		self.db = dbConnection
-		self.cursor = self.db.cursor()
+		
 		
 	# save author if it does not exist
 	def saveDepartment(self,departName):
+		cursor = self.db.cursor()
 		try:
 		
 			sql = "select * from department where department_name=%s"
 			val = (departName,)
 			
-			self.cursor.execute(sql,val)
+			cursor.execute(sql,val)
 			
-			if(self.cursor.fetchone()!=None):
+			depart = cursor.fetchone()
+			if(depart!=None):
 				return {"status":500,"message":"Duplicate department name","Error":""}
 			else:
 				sql = "INSERT INTO department(department_name) VALUES (%s)"
-				self.cursor.execute(sql, val)
+				cursor.execute(sql, val)
 				self.db.commit()
 				
 				return {"status":200,"message":"Department Saved","Error":""}
 		except Exception as e:
 			print(e)
 			return {"status":500,"message":"","Error":"Server Error"}
+		finally:
+			cursor.close()
 			
 		
 	# get all deparments
 	def getAllDepartment(self):
+		cursor = None
 		try:
+			cursor = self.db.cursor()
 			keys =  ('department_id','department_name')
 			sql = "select * from department"
-			
-			
 			departments = []
 
-			self.cursor.execute(sql)
+			cursor.execute(sql)
 				
-			for x in self.cursor.fetchall():
+			for x in cursor.fetchall():
 				departments.append(dict(zip(keys,x)))
 				
 			return departments
-		except:
+		except Exception as x:
 			print(x)
-			
 			return {"status":500,"message":"","Error":"Server Error"}
-			
+		finally:
+			if cursor!=None:
+				cursor.close()
 			

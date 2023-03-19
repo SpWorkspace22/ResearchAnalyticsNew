@@ -33,7 +33,7 @@ def processAuthors():
 		else:
 			result = helper.updateAuthor(data)
 			
-		return result
+		return jsonify(result)
 	else:
 		authors = helper.getAllAuthorsData(None)
 		return jsonify(authors)
@@ -44,17 +44,14 @@ def processAuthors():
 @app.route("/author",methods=["GET"])
 def getAuthorUsingEmail():
 	result = helper.getAllAuthorsData(request.args['email'])
-	
-	print(result)
+
 	return jsonify(result)
 
 #RemoveAuthor
 @app.route("/authors/remove",methods=["DELETE"])
 def removeAuthor():
 	result = authorOp.removeAuthor(request.args['author_id'])
-	return result
-
-
+	return jsonify(result)
 
 
 
@@ -64,11 +61,29 @@ def processDepartments():
 	if request.method=='POST':
 		data = json.loads(request.data)
 		result = departOp.saveDepartment(data['depart_name'])
-		return result
+		return jsonify(result)
 	else:
 		result = departOp.getAllDepartment()
-		return result
+		return jsonify(result)
 		
+
+
+# utility Function
+
+# upload bulk authors
+@app.route("/uploadAuthors",methods=["POST"])
+def uploadAuthors():
+	results = []
+	authors = json.loads(request.data)
+	
+	for author in authors:
+		if "author_id" not in author:
+			result = helper.saveAuthor(author)
+		else:
+			pass
+		results.append(result)
+	
+	return jsonify(results)
 
 
 #start of server 

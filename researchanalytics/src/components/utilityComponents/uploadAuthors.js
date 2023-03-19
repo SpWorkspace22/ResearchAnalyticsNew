@@ -1,5 +1,7 @@
 import "./uploadAuthor.css"
 import { read, utils, writeFile } from 'xlsx';
+import axios from 'axios';
+
 import { useState } from "react";
 
 export default function AuthorUpload(){
@@ -50,12 +52,26 @@ export default function AuthorUpload(){
 
        return authorsList;
     }
+    
     function checkRequiredFields(header){
         if(!header.includes("first_name") || !header.includes("last_name") 
         || !header.includes("email") || !header.includes("depart_name")){
             return false
         }
         return true
+    }
+
+
+    function uploadData(){
+        axios.post('http://127.0.0.1:5000/uploadAuthors', authorsData.authors)
+        .then(function (response) {
+            // handle success
+            console.log(response)
+        })
+        .catch(function (error) {
+            // handle error
+            console.log(error);
+        })  
     }
 
     return (
@@ -68,13 +84,14 @@ export default function AuthorUpload(){
                         accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"/>
                     </div>
                 </div>
-                <div className="col-md-4 ps-5">
-                    <div className="mb-3">
-                        <button className="btn btn-primary">Upload</button>
-                    </div>
-                </div>
             </div>
             <hr className="mt-4"/>
+            <div className="col-md-4 ">
+                <div className="mb-3">
+                    <button className="btn btn-primary" onClick={uploadData}
+                    disabled={ authorsData.authors.length==0 ? true : false}>Upload</button>
+                </div>
+            </div>
             <table className="ui single selectable green line table attached small mt-3">
             <thead>
                 <tr>
@@ -89,7 +106,11 @@ export default function AuthorUpload(){
             </thead>
             <tbody>
                 {
-                    authorsData.error ? <tr>{authorsData.error}</tr> :
+                    authorsData.error ? 
+                        <div className="alert alert-danger mt-3" role="alert">
+                            {authorsData.error}
+                        </div>
+                         :
                     authorsData.authors.map((author)=>{
                         return (
                             <tr>
