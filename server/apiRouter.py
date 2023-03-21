@@ -5,6 +5,8 @@ from serverSetup import DatabaseSetup
 from authorOperations import AuthorOperation
 from departmentOperation import DepartmentOperation
 from platformOperations import PlatFormOperations
+from articleOperation import ArticleOperation
+
 from helperUtilty import HelperUtility
 
 
@@ -18,6 +20,7 @@ authorOp = None
 departOp = None
 platOp =  None
 helper = None
+articleOp = None
 
 # authors routers 
 
@@ -54,6 +57,30 @@ def removeAuthor():
 	return jsonify(result)
 
 
+# Article Routes
+
+# get all article
+@app.route("/articles",methods=["GET"])
+def getAllArticles():
+	
+	args = request.args
+	
+	data = ""
+	
+	if(len(args)==0):
+		data = "All Articles"
+	elif('platform_code' in args and 'article_name' in args):
+		data="Get by code and name"
+	elif('platform_code' in args):
+		data="Get by code"
+	else:
+		data="Get By name"
+
+	
+		
+	return jsonify(data)
+
+
 
 # department routes
 @app.route("/depart",methods=["GET","POST"])
@@ -66,6 +93,7 @@ def processDepartments():
 		result = departOp.getAllDepartment()
 		return jsonify(result)
 		
+
 
 
 # utility Function
@@ -100,9 +128,14 @@ if __name__ == '__main__':
 		authorOp = AuthorOperation(connection) 
 		departOp = DepartmentOperation(connection)
 		platOp = PlatFormOperations(connection)
+		articleOp = ArticleOperation(connection)
 		helper = HelperUtility(connection)
+		
 		
 		app.run(debug = True)  
 	except Exception as e:
 		print(e)
+	finally:
+		if connection!=None:
+			connection.close()
 
