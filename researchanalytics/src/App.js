@@ -5,6 +5,7 @@ import DashboardPage from "./components/DashboardPage";
 import AuthorsPage from "./components/AuthorsPage"
 import SideNavBar from './components/SideNavBar';
 import AuthorUpload from './components/utilityComponents/uploadAuthors';
+import ArticlesPage from './components/articlesComponent/articlesPage';
 
 
 export default function App() {
@@ -22,6 +23,7 @@ export default function App() {
               <Route path="/dashboard" element={<DashboardPage />} />
               <Route path="/authors" element={<AuthorsPage />} />
               <Route path="/uploadAuth" element={<AuthorUpload />} />
+              <Route path='/article' element={<ArticlesPage />} />
             </Routes>
           </div>
       {/* // </div> */}

@@ -14,7 +14,7 @@ export default function Navbar(){
                 </Link> 
             </a>
             <a className="item">
-                <Link to="#" >
+                <Link to="/article" >
                     <i className="file alternate icon"></i>
                     Articles
                 </Link>

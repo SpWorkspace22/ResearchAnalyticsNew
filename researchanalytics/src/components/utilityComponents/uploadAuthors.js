@@ -91,7 +91,7 @@ export default function AuthorUpload(){
             <hr className="mt-4"/>
             <div className="col-md-4 ">
                 <div className="mb-3">
-                    <button className="btn btn-primary" onClick={uploadData}
+                    <button className="ui primary button" onClick={uploadData}
                     disabled={ authorsData.authors.length==0 ? true : false}>Upload</button>
                 </div>
             </div>
