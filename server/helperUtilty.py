@@ -188,7 +188,7 @@ class HelperUtility:
 
 		summaryData["artPubByYear"] = self.articleOp.getArticlePublishByYear()
 		summaryData["artPubByPlatform"] = self.getArticlesCountByPlatform()
-
+		summaryData["countSummary"] = self.getCountSummary()
 		return summaryData
 
 	def getArticlesCountByPlatform(self):
@@ -215,4 +215,25 @@ class HelperUtility:
 			print(e)
 		finally:
 			if cursor !=None:
+				cursor.close()
+
+	def getCountSummary(self):
+		cursor = None
+		try:
+			cursor = self.db.cursor()
+			sqllist = {"authors":"select count(distinct(author_id)) from author",
+	      				"articles":"select count(*) from articles",
+						"platforms":"select count(*) from platform"}
+			
+			countSummaryData = {}
+
+			for key,sql in sqllist.items():
+				cursor.execute(sql)
+				countSummaryData[key]=cursor.fetchone()[0]
+			return countSummaryData
+		except Exception as e:
+			print(e)
+			{}
+		finally:
+			if cursor!=None:
 				cursor.close()

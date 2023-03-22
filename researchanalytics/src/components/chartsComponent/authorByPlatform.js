@@ -1,24 +1,12 @@
-import axios from 'axios';
-import React, { PureComponent, useEffect, useState } from 'react';
-import { BarChart, Bar, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend } from 'recharts';
 
-export default function AuthorByPlatform() {
-     let [data,setData] = useState([])
+export default function AuthorByPlatform({artPubByPlatform}) {
 
-    useEffect(()=>{
-      axios.get('http://127.0.0.1:5000/summary')
-      .then((response)=>{
-        setData([...response.data.artPubByPlatform]);
-      }).catch((err)=>{
-        console.log(err)
-      })
-    },[])
-    
     return (
         <BarChart
           width={window.innerWidth-100}
           height={300}
-          data={data}
+          data={artPubByPlatform}
           margin={{
             top: 5,
             right: 30,

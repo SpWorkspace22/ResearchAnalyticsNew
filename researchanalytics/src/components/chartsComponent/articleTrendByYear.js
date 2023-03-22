@@ -1,25 +1,11 @@
-import React, { PureComponent, useEffect, useState } from 'react';
-import { LineChart, AreaChart,Area, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend,Text } from 'recharts';
+import { AreaChart,Area, XAxis, YAxis, Tooltip, Legend } from 'recharts';
 
-import axios from 'axios'
-
-export default function ArticleTrendByYear()  {
- let [data,setData] = useState([])
-
-    useEffect(()=>{
-      axios.get('http://127.0.0.1:5000/summary')
-      .then((response)=>{
-        setData([...response.data.artPubByYear]);
-      }).catch((err)=>{
-        console.log(err)
-      })
-    },[])
-
+export default function ArticleTrendByYear({artByYear})  {
     return (    
         <AreaChart
           width={window.innerWidth-100}
           height={300}
-          data={data}
+          data={artByYear}
           margin={{
             top: 5,
             right: 30,

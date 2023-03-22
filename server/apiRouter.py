@@ -83,7 +83,7 @@ def getAllArticles():
 
 @app.route("/summary")
 def getArticleCountByYear():
-	summaryData = []
+	summaryData = {}
 	summaryData = helper.getSummary()
 	return jsonify(summaryData)
 
