@@ -81,6 +81,12 @@ def getAllArticles():
 	return jsonify(data)
 
 
+@app.route("/summary")
+def getArticleCountByYear():
+	summaryData = []
+	summaryData = helper.getSummary()
+	return jsonify(summaryData)
+
 
 # department routes
 @app.route("/depart",methods=["GET","POST"])

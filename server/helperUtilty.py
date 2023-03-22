@@ -1,5 +1,7 @@
 from authorOperations import AuthorOperation
 from platformOperations import PlatFormOperations
+from articleOperation import ArticleOperation
+
 from flask import Flask, request, json, jsonify
 class HelperUtility:
 
@@ -13,7 +15,7 @@ class HelperUtility:
 		
 		self.authorOp = AuthorOperation(dbConnection)
 		self.platOp = PlatFormOperations(dbConnection)
-		
+		self.articleOp = ArticleOperation(dbConnection)
 		
 
 	def saveAuthor(self,data):
@@ -178,4 +180,39 @@ class HelperUtility:
 			print(e)
 		finally:
 			if cursor!=None:
+				cursor.close()
+
+
+	def getSummary(self):
+		summaryData = {}
+
+		summaryData["artPubByYear"] = self.articleOp.getArticlePublishByYear()
+		summaryData["artPubByPlatform"] = self.getArticlesCountByPlatform()
+
+		return summaryData
+
+	def getArticlesCountByPlatform(self):
+		cursor = None
+		articleSummary=[]
+		try:
+			cursor = self.db.cursor()
+
+			sql = "select author_id,concat(first_name,' ',last_name) as name from author"
+			cursor.execute(sql)
+
+			authors = cursor.fetchall()
+			articles = self.articleOp.getArticlePublishByPlatform()
+			
+			for article in articles:
+				for author in authors:
+					if article["author_id"]==author[0]:
+						article["name"]=author[1]
+						articleSummary.append(article)
+						break
+			return articleSummary
+		
+		except Exception as e:
+			print(e)
+		finally:
+			if cursor !=None:
 				cursor.close()
