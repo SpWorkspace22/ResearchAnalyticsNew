@@ -76,8 +76,6 @@ def getAllArticles():
 	else:
 		data=articleOp.getArticlesByName(args['article_name'])
 
-
-		
 	return jsonify(data)
 
 
@@ -102,6 +100,8 @@ def processDepartments():
 
 
 
+
+
 # utility Function
 
 # upload bulk authors
@@ -118,6 +118,16 @@ def uploadAuthors():
 		
 		results.append(result)
 	return jsonify(results)
+
+
+# Extraction route 
+@app.route("/scan")
+def extractData():
+	result = None
+	
+	result = helper.beginExtract()
+	
+	return jsonify(result)
 
 
 #start of server 

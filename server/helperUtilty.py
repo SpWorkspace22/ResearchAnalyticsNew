@@ -1,6 +1,7 @@
 from authorOperations import AuthorOperation
 from platformOperations import PlatFormOperations
 from articleOperation import ArticleOperation
+from googleExtractor import GoogleScholarExtractor 
 
 from flask import Flask, request, json, jsonify
 class HelperUtility:
@@ -183,6 +184,7 @@ class HelperUtility:
 				cursor.close()
 
 
+	# all types Summary
 	def getSummary(self):
 		summaryData = {}
 
@@ -191,6 +193,8 @@ class HelperUtility:
 		summaryData["countSummary"] = self.getCountSummary()
 		return summaryData
 
+
+	# get aricle counts pubkished over the year
 	def getArticlesCountByPlatform(self):
 		cursor = None
 		articleSummary=[]
@@ -217,6 +221,7 @@ class HelperUtility:
 			if cursor !=None:
 				cursor.close()
 
+	# get different counts of data
 	def getCountSummary(self):
 		cursor = None
 		try:
@@ -234,6 +239,43 @@ class HelperUtility:
 		except Exception as e:
 			print(e)
 			{}
+		finally:
+			if cursor!=None:
+				cursor.close()
+				
+				
+	# sanning different platforms to pull data
+	def beginExtract(self):
+		gsExtractor = None
+		cursor = None
+		try:
+				
+			cursor = self.db.cursor()
+			
+			sql = "select author_id,platform_code,platform_id from author_platform where platform_code=GS"
+			
+			cursor.execute(sql)
+			authors = cursor.fetchall()
+			
+			cursor.close()
+			
+			gsExtractor = GoogleScholarExtractor()
+			
+			gsArticleList = gsExtractor.parseData(authors)
+			
+			
+			for gsArticle in gsArticleList:
+				article_id = self.articleOp.getAllArticlesBytitleAuthorName(gsArticle['title'],gsArticle['author_id'],gsArticle['platform_code'])
+				
+				if(aricle==None):
+					self.articleOp.saveArticles(gsArticle)
+				else:
+					self.articleOp.updateArticles(gsArticle['number_of_citation'],aricle_id)
+				
+			return {"message":"Extraction Completed Successfully"}
+		except Exception as e:
+			print(e)
+			return {"message":"Extraction Unsuccessfull"}
 		finally:
 			if cursor!=None:
 				cursor.close()

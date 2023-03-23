@@ -3,11 +3,45 @@ class ArticleOperation:
 	def __init__(self,dbConnection):
 		self.db = dbConnection
 		
-	def saveArticles(self):
-		pass
+	def saveArticles(self,article):
+		cursor = None
+		try:
+			cursor = self.db.cursor()
+			
+			sql = "insert into articles(article_name,journal_name,pub_year,citation,author_id,platform_code) values(%s,%s,%s,%s,%s,%s)"
+			values = (article['title'],article['journal_name'],article['pub_year'],article['number_of_citation'],article['author_id'],article['platform_code'])
+			
+			cursor.execute(sql,values)
+			
+			result = cursor.rowcount
+			return result
 		
-	def updateArticles(self):
-		pass
+		except Exception as e:
+			print(e)
+			return -1
+		finally:
+			if cursor!=None:
+				cursor.close()
+				
+	def updateArticles(self,citation,article_id):
+		cursor = None
+		try:
+			cursor = self.db.cursor()
+			
+			sql = " update articles set citation=%s where articleid=%s"
+			values = (citation,article_id)
+			
+			cursor.execute(sql,values)
+			
+			result = cursor.rowcount
+			return result
+		
+		except Exception as e:
+			print(e)
+			return -1
+		finally:
+			if cursor!=None:
+				cursor.close()
 		
 		
 	def getAllArticles(self):
@@ -29,6 +63,29 @@ class ArticleOperation:
 		except Exception as e:
 			print(e)
 			return articles
+		finally:
+			if cursor!=None:
+				cursor.close()
+
+	def getAllArticlesBytitleAuthorName(self,title,author_id,platform_code):
+		cursor = None
+		article = None
+		
+		try:
+			cursor = self.db.cursor()
+			
+			sql = "select article_id from articles where article_name=%s and author_id=%s and platform_code=%s";
+			values = (title,author_id,platform_code)
+			
+			cursor.execute(sql)
+			
+			article = cursor.fetchone()
+			
+			
+			return article
+		except Exception as e:
+			print(e)
+			return article
 		finally:
 			if cursor!=None:
 				cursor.close()
