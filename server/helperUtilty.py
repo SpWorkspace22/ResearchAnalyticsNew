@@ -252,7 +252,7 @@ class HelperUtility:
 				
 			cursor = self.db.cursor()
 			
-			sql = "select author_id,platform_code,platform_id from author_platform where platform_code=GS"
+			sql = "select author_id,platform_code,platform_id from author_platform where platform_code='GS'"
 			
 			cursor.execute(sql)
 			authors = cursor.fetchall()
@@ -264,12 +264,17 @@ class HelperUtility:
 			gsArticleList = gsExtractor.parseData(authors)
 			
 			
+			
 			for gsArticle in gsArticleList:
 				article_id = self.articleOp.getAllArticlesBytitleAuthorName(gsArticle['title'],gsArticle['author_id'],gsArticle['platform_code'])
 				
-				if(aricle==None):
+				
+				if(article_id==None):
+				
+					print("Insert")
 					self.articleOp.saveArticles(gsArticle)
 				else:
+					print("Update")
 					self.articleOp.updateArticles(gsArticle['number_of_citation'],aricle_id)
 				
 			return {"message":"Extraction Completed Successfully"}

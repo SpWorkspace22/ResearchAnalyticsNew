@@ -12,6 +12,7 @@ class ArticleOperation:
 			values = (article['title'],article['journal_name'],article['pub_year'],article['number_of_citation'],article['author_id'],article['platform_code'])
 			
 			cursor.execute(sql,values)
+			self.db.commit()
 			
 			result = cursor.rowcount
 			return result
@@ -28,11 +29,11 @@ class ArticleOperation:
 		try:
 			cursor = self.db.cursor()
 			
-			sql = " update articles set citation=%s where articleid=%s"
+			sql = " update articles set citation=%s where article_id=%s"
 			values = (citation,article_id)
 			
 			cursor.execute(sql,values)
-			
+			self.db.commit()
 			result = cursor.rowcount
 			return result
 		
@@ -73,11 +74,11 @@ class ArticleOperation:
 		
 		try:
 			cursor = self.db.cursor()
-			
-			sql = "select article_id from articles where article_name=%s and author_id=%s and platform_code=%s";
+		
+			sql = "select article_id from articles where article_name=%s and author_id=%s and platform_code=%s"
 			values = (title,author_id,platform_code)
 			
-			cursor.execute(sql)
+			cursor.execute(sql,values)
 			
 			article = cursor.fetchone()
 			
