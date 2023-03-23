@@ -275,7 +275,7 @@ class HelperUtility:
 					self.articleOp.saveArticles(gsArticle)
 				else:
 					print("Update")
-					self.articleOp.updateArticles(gsArticle['number_of_citation'],aricle_id)
+					self.articleOp.updateArticles(gsArticle['number_of_citation'],article_id[0])
 				
 			return {"message":"Extraction Completed Successfully"}
 		except Exception as e:

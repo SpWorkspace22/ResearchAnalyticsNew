@@ -28,11 +28,21 @@ export default function ArticlesPage(){
 
         if(article_name!=="" && platform_code!==""){
             findByFilterCriteria({article_name:pageData.article_name,platform_code:pageData.platform_code})
-        }else if(platform_code!="" && platform_code!=="-1"){
+        }else if(platform_code!=="" && platform_code!=="-1"){
             findByFilterCriteria({platform_code:pageData.platform_code})
         }else{
             findByFilterCriteria({article_name:pageData.article_name})
         }
+    }
+	
+	
+	function handleScan(){
+		alert("Scan Started")
+        axios.get('http://127.0.0.1:5000/scan').then((response)=>{
+            alert(response.data.message)
+        }).catch((err)=>{
+            console.log(err)
+        });
     }
 
     return(
@@ -63,7 +73,7 @@ export default function ArticlesPage(){
             <hr/>
             <div className="two fields">
                 <div className="field">
-                    <button type="button" className="ui green button">Scan</button>
+                    <button type="button" className="ui green button" onClick={handleScan}>Scan</button>
                     <button type="button" onClick={handleRefresh}
                     className="ui olive right floated circular icon button">
                         <i className="sync alternate icon"></i>
