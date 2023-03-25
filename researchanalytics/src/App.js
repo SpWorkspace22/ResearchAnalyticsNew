@@ -6,17 +6,13 @@ import AuthorsPage from "./components/AuthorsPage"
 import SideNavBar from './components/SideNavBar';
 import AuthorUpload from './components/utilityComponents/uploadAuthors';
 import ArticlesPage from './components/articlesComponent/articlesPage';
+import SettingsPage from './components/SettingsPage';
 
 
 export default function App() {
   return (  
       <BrowserRouter>
         <HeadNavbar />
-        {/* <div className="ui grid mt-1" style={{height:"100vh"}}>
-          <div className="two wide column border-end shadow">
-            <SideNavBar />
-          </div>
-          <div className="fourteen wide column"> */}
           <div className='mt-2'>
             <Routes>
               <Route exact path="/" element={<DashboardPage />} />
@@ -24,6 +20,7 @@ export default function App() {
               <Route path="/authors" element={<AuthorsPage />} />
               <Route path="/uploadAuth" element={<AuthorUpload />} />
               <Route path='/article' element={<ArticlesPage />} />
+              <Route path='/setup' element={<SettingsPage />} />
             </Routes>
           </div>
       {/* // </div> */}

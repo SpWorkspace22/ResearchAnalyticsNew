@@ -1,9 +1,23 @@
-import { useState} from 'react'
+import { useEffect, useState} from 'react'
 import axios from 'axios';
 import './articlePage.css'
 
 export default function ArticlesPage(){
     const [pageData,setPageData] = useState({articles:[],article_name:'',platform_code:''});
+    let [platforms,setPlatforms] = useState([])
+    let [scanStatus,setScanStatus] = useState(false)
+    
+    useEffect(()=>{
+        axios.get('http://127.0.0.1:5000/platforms',)
+        .then(function (response) {
+            // handle success
+            setPlatforms([...response.data])
+        })
+        .catch(function (error) {
+            // handle error
+            console.log(error);
+        })
+    },[])  
 
     function handleRefresh(){
         axios.get('http://127.0.0.1:5000/articles').then((response)=>{
@@ -37,12 +51,14 @@ export default function ArticlesPage(){
 	
 	
 	function handleScan(){
-		alert("Scan Started")
         axios.get('http://127.0.0.1:5000/scan').then((response)=>{
             alert(response.data.message)
+            setScanStatus(false)
         }).catch((err)=>{
             console.log(err)
         });
+
+        setScanStatus(true)
     }
 
     return(
@@ -62,8 +78,18 @@ export default function ArticlesPage(){
                             <select className="ui fluid dropdown" name="depart" 
                             onChange={(e)=>setPageData({...pageData,platform_code:e.target.value})}>
                                 <option value="-1"></option>
-                                <option value="GS">Google Scholar</option>
-                                <option value="SC">Scopus</option>
+                                {
+                                platforms.map((platform)=>{
+                                    return (
+                                        <option 
+                                            value={platform.platform_code} 
+                                            selected={pageData.platform_code===platform.platform_code?true:false}
+                                        >
+                                        {platform.platform_name.toUpperCase()}
+                                        </option>
+                                    );
+                                })
+                            }
                             </select>
                         </div>                      
                     </div>
@@ -73,14 +99,18 @@ export default function ArticlesPage(){
             <hr/>
             <div className="two fields">
                 <div className="field">
-                    <button type="button" className="ui green button" onClick={handleScan}>Scan</button>
+                    <button type="button" className="ui green button" 
+                    onClick={handleScan} disabled={scanStatus}>
+                        { scanStatus ? <i class="loading spinner icon"></i>:"" }
+                        Scan
+                    </button>
                     <button type="button" onClick={handleRefresh}
                     className="ui olive right floated circular icon button">
                         <i className="sync alternate icon"></i>
                     </button>
                 </div>
             </div>
-            <table className="ui fixed selectable blue line table attached mt-3">
+            <table className="ui fixed selectable blue line table attached mt-3" id="article">
             <thead>
                 <tr>
                     <th className='one wide'>Article Id</th>

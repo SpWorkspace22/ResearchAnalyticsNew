@@ -1,11 +1,11 @@
-tbody {
+#author tbody {
   display: block;
   max-height: 400px;
   overflow: auto;
 }
 
 
-thead,
+#author thead,
 tbody tr {
   display: table;
   width: 100%;

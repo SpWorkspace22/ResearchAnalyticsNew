@@ -53,16 +53,19 @@ export default function AuthorsList({onEditPopulateForm})
     }
 
     function onRemoveAuthor(author_id){
-        axios.delete('http://127.0.0.1:5000/authors/remove',
-        { params: { author_id: author_id } })
-        .then(function (response) {
-            // handle success
-            onLoadData();
-        })
-        .catch(function (error) {
-            // handle error
-            console.log(error);
-        })
+       let result = window.confirm("Are you sure, to delete author and related record")
+            if(result){
+            axios.delete('http://127.0.0.1:5000/authors/remove',
+            { params: { author_id: author_id } })
+            .then(function (response) {
+                alert(response.data.message)
+                onLoadData();
+            })
+            .catch(function (error) {
+                // handle error
+                console.log(error);
+            })
+        }
     }
 
     return (
@@ -89,7 +92,7 @@ export default function AuthorsList({onEditPopulateForm})
                     </div>
                 </div>
             </div>
-            <table className="ui single selectable green line table attached small mt-3">
+            <table className="ui single selectable green line table attached small mt-3" id="author">
             <thead>
                 <tr>
                     <th>AuthorId</th>

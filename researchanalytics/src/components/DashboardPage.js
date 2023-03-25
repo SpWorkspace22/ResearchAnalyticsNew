@@ -26,7 +26,7 @@ export default function DashboardComponenet(){
     
 
     return (
-        <div className="container-fluid bg-light">
+        <div className="container-fluid">
             <h2 className="ui dividing header blue pb-3 pt-3">Summary Page</h2>
             <div style={{width:"100%",height:"100vh"}}>
                 <div className="ui grid">

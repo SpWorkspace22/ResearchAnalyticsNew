@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import AuthorsForm from "./authorsComponent/AuthorForm";
 import AuthorsList from "./authorsComponent/AuthorsList";
-import AuthorsData from './authorsData';
 
 import axios from "axios";
 

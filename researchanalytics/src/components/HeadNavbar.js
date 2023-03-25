@@ -2,9 +2,9 @@ import {Link} from 'react-router-dom';
 
 export default function Navbar(){
     return (
-        <div className="ui inverted attached  small menu">
+        <div className="ui inverted teal attached  small menu shadow">
             <a className="item">
-                <span className='text-primary fs-2'>R</span>A  
+                <span className='fs-2'><i className="chart bar outline icon"></i>R</span>A  
             </a>
 
             <a className="item" > 
@@ -36,6 +36,13 @@ export default function Navbar(){
                         </Link>
                     </li>
                 </ul>
+            </div>
+            <div class="right menu">
+                <a class="ui item pe-5">
+                    <Link to="/setup" >
+                        <i class="cogs icon"></i> Settings
+                    </Link>
+                </a>
             </div>
         </div>
     );
