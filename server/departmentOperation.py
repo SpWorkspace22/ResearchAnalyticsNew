@@ -37,7 +37,7 @@ class DepartmentOperation:
 		try:
 			cursor = self.db.cursor()
 			keys =  ('department_id','department_name')
-			sql = "select * from department"
+			sql = "select * from department order by deparment_id"
 			departments = []
 
 			cursor.execute(sql)
@@ -53,3 +53,24 @@ class DepartmentOperation:
 			if cursor!=None:
 				cursor.close()
 			
+
+	def removeDepartment(self,author_id):
+		cursor = None
+		try:
+			cursor=self.db.cursor()
+			sql = "delete from department where deparment_id=%s"
+			val=(author_id,)
+
+			cursor.execute(sql,val)
+			self.db.commit()
+
+			rowcount = cursor.rowcount
+
+			if rowcount >0:
+				return {"status":200,"message":"Department Removed"}
+		except Exception as e:
+			print(e)
+			return {"status":500,"message":e}
+		finally:
+			if cursor!=None:
+				cursor.close()

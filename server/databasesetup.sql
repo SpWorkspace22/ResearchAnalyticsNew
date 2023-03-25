@@ -7,12 +7,16 @@ use researchanalytics;
 -- drop table platform;
 
 
--- create table author(author_id int auto_increment primary key ,first_name varchar(100) not null,last_name varchar(100) not null,email varchar(100) unique , phone varchar(15),department_id int REFERENCES department(deparment_id));
 -- create table platform(platform_code varchar(10) primary key,platform_name varchar(100) not null);
 -- create table department(deparment_id int auto_increment primary key, department_name varchar(50) not null unique);
--- create table author_platform(author_id int REFERENCES author(author_id),platform_code varchar(10) references platform(platform_code), platform_id varchar(100));
+
+-- create table author(author_id int auto_increment primary key ,first_name varchar(100) not null,last_name varchar(100) not null,email varchar(100) unique , phone varchar(15),
+-- department_id int, CONSTRAINT auth_dept_fk FOREIGN KEY (department_id) REFERENCES department(deparment_id) ON DELETE CASCADE);
+-- create table author_platform(author_id int,platform_code varchar(10),platform_id varchar(100), CONSTRAINT auth_plat_fk FOREIGN KEY (author_id) REFERENCES author(author_id) ON DELETE CASCADE,
+-- CONSTRAINT dept_plat_fk FOREIGN KEY (platform_code) REFERENCES platform(platform_code) ON DELETE CASCADE );
 -- create table articles(article_id int auto_increment primary key,article_name varchar(256) not null, journal_name varchar(256),pub_year int,citation int,
--- author_id int references author(author_id),platform_code varchar(10) references platform(platform_code));
+-- author_id int,platform_code varchar(10),  CONSTRAINT art_auth_fk FOREIGN KEY (author_id) REFERENCES author(author_id) ON DELETE CASCADE,
+-- CONSTRAINT art_plat_fk FOREIGN KEY (platform_code) REFERENCES platform(platform_code) ON DELETE CASCADE);
 
 -- insert into department(department_name) values("MCA");
 -- insert into department(department_name) values("BTECH");

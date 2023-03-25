@@ -63,9 +63,7 @@ def removeAuthor():
 # get all article
 @app.route("/articles",methods=["GET"])
 def getAllArticles():
-	
 	args = request.args
-	
 	data = None
 	
 	if(len(args)==0):
@@ -79,7 +77,7 @@ def getAllArticles():
 
 	return jsonify(data)
 
-
+# article summary
 @app.route("/summary")
 def getArticleCountByYear():
 	summaryData = {}
@@ -97,10 +95,28 @@ def processDepartments():
 	else:
 		result = departOp.getAllDepartment()
 		return jsonify(result)
-		
+
+@app.route("/depart/remove",methods=["DELETE"])
+def removeDepartment():
+	result = departOp.removeDepartment(request.args['department'])
+	return jsonify(result)
 
 
+# platforms
+@app.route("/platforms",methods=["GET","POST"])
+def processPlatformData():
+	result = []
+	if request.method=="GET":
+		result = platOp.getPlaformDetails()
+	else:
+		data = json.loads(request.data)
+		result = platOp.savePlaformDetails(data)
+	return jsonify(result)
 
+@app.route("/platforms/remove",methods=["DELETE"])
+def removePlatform():
+	result = platOp.removePlatform(request.args['platform'])
+	return jsonify(result)
 
 
 # utility Function

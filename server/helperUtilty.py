@@ -63,8 +63,6 @@ class HelperUtility:
 		
 		if(self.authorOp.getAuthorByEmail(data["email"])!=[] or self.isAuthorDiff(data["author_id"],data["email"])):
 			rowUpdated = self.authorOp.updateAuthor(data["author_id"],data["first_name"],data["last_name"],data["email"],data["phone"],data["depart_name"])
-		
-			print(rowUpdated)
 			
 			if(rowUpdated>=0):
 			

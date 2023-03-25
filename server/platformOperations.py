@@ -4,22 +4,92 @@ class PlatFormOperations:
 		self.db = dbConnection
 
 		
-	def savePlaformDetails(self,platform_code,platform_name):
-		pass
+	def savePlaformDetails(self,data):
+		cursor = None
+		try:
+			cursor = self.db.cursor()
+			sql = "insert into platform(platform_code,platform_name) values(%s,%s)"
+			val = (data["platform_code"],data["platform_name"])
+
+			if(self.getPlatformByCode(data['platform_code'])==None):
+				cursor.execute(sql,val)
+				self.db.commit()
+				return {"status":200,"message":"platformed created"}
+			else:
+				return {"status":200,"message":"Platform exists"}
+		except Exception as e:
+			print(e)
+			return {"status":500,"message":e}
+		finally:
+			if cursor!=None:
+				cursor.close()
 		
-	
-	def getPlaformDetails(self,platform_code):
-		pass
-		
-		
-		
+	def getPlaformDetails(self):
+		cursor = None
+		platforms = []
+		try:
+			cursor = self.db.cursor()
+			key = ("platform_code","platform_name")
+			sql = "select * from platform"
+
+			cursor.execute(sql)
+
+			for platform in cursor.fetchall():
+				platforms.append(dict(zip(key,platform)))
+			
+			return platforms
+		except Exception as e:
+			print(e)
+			return []
+		finally:
+			if cursor!=None:
+				cursor.close()
+
+	def getPlatformByCode(self,platform_code):
+		cursor = None
+		try:
+			cursor = self.db.cursor()
+			sql = "select * from platform where platform_code=%s"
+			val= (platform_code,)
+			cursor.execute(sql,val)
+
+			platform = cursor.fetchone()
+			print(platform)
+			return platform
+		except Exception as e:
+			print(e)
+			return None
+		finally:
+			if cursor!=None:
+				cursor.close()
+
+	def removePlatform(self,platform_code):
+		cursor = None
+		try:
+			cursor = self.db.cursor()
+			sql = "delete from platform where platform_code=%s"
+			val = (platform_code,)
+
+			cursor.execute(sql,val)
+			self.db.commit()
+
+			rowcount = cursor.rowcount
+			if rowcount > 0:
+				return {"status":200,"message":"Platform Removed"}
+		except Exception as e:
+			print(e)
+			return {"status":500,"message":e}
+		finally:
+			if cursor!=None:
+				cursor.close()
+
 	def getAuthorPlatformById(self,author_id):
 		cursor = self.db.cursor()
 		platforms = {}
 		try:
 			
 			keys = ('platform_code','platform_id')
-			
+		
 			sql = "select platform_code,platform_id from author_platform where author_id=%s"
 			val = (author_id,)
 			
@@ -40,12 +110,12 @@ class PlatFormOperations:
 			return platforms
 		finally:
 			cursor.close()
-			
+
+
 	def getAuthorPlatformData(self,author_id,platform_code):
 		cursor = self.db.cursor()
 		try:
-			
-			
+
 			keys = ('author_id','platform_code','platform_id')
 			
 			sql = "select * from author_platform where platform_code=%s and author_id=%s"
