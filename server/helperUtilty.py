@@ -190,6 +190,8 @@ class HelperUtility:
 		summaryData["artPubByPlatform"] = self.getArticlesCountByPlatform()
 		summaryData["countSummary"] = self.getCountSummary()
 		summaryData["artCountByPlatformCode"]=self.articleOp.getArticleCountByPlatform()
+		summaryData["artCountByDepAndPlat"]=self.getArticleCountByDepartmentAndPlatform()
+		
 		return summaryData
 
 
@@ -242,6 +244,44 @@ class HelperUtility:
 			if cursor!=None:
 				cursor.close()
 				
+				
+	def getArticleCountByDepartmentAndPlatform(self):
+		cursor = None
+		
+		articleByDepartAndPlat = []
+		try:
+			cursor = self.db.cursor()
+			
+			sql = "select department_name from department order by department_name";
+			
+			cursor.execute(sql)
+			departments = cursor.fetchall()
+			
+			for department in departments:
+				articleByDepartAndPlat.append({"department":department[0]})
+			
+			sql = '''select department_name,platform_code,count(*) as total from articles,
+ 					(select author_id,department_name from author,department where author.department_id=department.deparment_id) as e where articles.author_id=e.author_id 
+					 group by department_name,platform_code order by department_name'''
+			cursor.execute(sql)
+			
+			articleCount =  cursor.fetchall()
+			
+			for article in articleCount:
+				for data in articleByDepartAndPlat:
+					if data["department"] == article[0]:
+						data[article[1]]=article[2]
+						break
+
+			return articleByDepartAndPlat
+			
+		except Exception as e:
+			print(e)
+			return articleByDepartAndPlat
+		finally:
+			if cursor!=None:
+				cursor.close()
+			
 				
 	# sanning different platforms to pull data
 	def beginExtract(self):

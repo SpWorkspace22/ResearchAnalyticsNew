@@ -18,7 +18,7 @@ export default function AuthorByPlatform({artPubByPlatform}) {
           <YAxis allowDecimals={false}/>
           <Tooltip />
           <Legend />
-          <Bar dataKey="SC" fill="#439A97" />
+          <Bar dataKey="SC" fill="#ffc658" />
           <Bar dataKey="GS" fill="#82ca9d" />
         </BarChart>
     );

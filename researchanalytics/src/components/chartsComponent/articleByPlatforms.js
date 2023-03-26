@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { PieChart, Pie, Sector, Cell, LabelList } from 'recharts';
 
-const COLORS = ['#0088FE', '#00C49F'];
+const COLORS = ['#82ca9d', '#8884d8'];
 
 const RADIAN = Math.PI / 180;
 
