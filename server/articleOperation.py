@@ -226,3 +226,26 @@ class ArticleOperation:
 		finally:
 			if cursor!=None:
 				cursor.close()
+
+
+	def getArticleCountByPlatform(self):
+		cursor = None
+		artCountByPlatformCode =[]
+
+		try:
+			cursor = self.db.cursor()
+			key = ("platform_code","total")
+			sql = "select platform_code,count(*) as total from articles group by platform_code"
+
+			cursor.execute(sql)
+
+			for data in cursor.fetchall():
+				artCountByPlatformCode.append(dict(zip(key,data)))
+			
+			return artCountByPlatformCode
+		except Exception as e:
+			print(e)
+			return artCountByPlatformCode
+		finally:
+			if cursor !=None:
+				cursor.close()

@@ -189,6 +189,7 @@ class HelperUtility:
 		summaryData["artPubByYear"] = self.articleOp.getArticlePublishByYear()
 		summaryData["artPubByPlatform"] = self.getArticlesCountByPlatform()
 		summaryData["countSummary"] = self.getCountSummary()
+		summaryData["artCountByPlatformCode"]=self.articleOp.getArticleCountByPlatform()
 		return summaryData
 
 

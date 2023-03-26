@@ -2,7 +2,7 @@ import "./uploadAuthor.css"
 export default function UploadLog({responses}){
     console.log(responses)
     return (
-        <table className="ui single selectable green line table attached small mt-3">
+        <table className="ui single selectable green line table attached small mt-3" id="upload">
             <thead>
                 <tr>
                     <th>Success</th>

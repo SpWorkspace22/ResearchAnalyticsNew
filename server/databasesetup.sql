@@ -76,5 +76,5 @@ use researchanalytics;
 -- insert into articles(article_name,journal_name,pub_year,citation,author_id,platform_code)VALUES('The Relationship Between Attitude Toward Science and Academic Achievement in Science: A Three-Level Meta-Analysis','Science Line',2012,311,6,'SC');
 -- insert into articles(article_name,journal_name,pub_year,citation,author_id,platform_code)VALUES('Identifying Economics’ Place Amongst Academic Disciplines: A Science or a Social Science','Science Line',2002,490,7,'SC');
 
-select * from platform;
+select * from author;
 commit

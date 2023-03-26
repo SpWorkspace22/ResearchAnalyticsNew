@@ -1,11 +1,11 @@
-tbody {
+ tbody {
   display: block;
   max-height: 700px;
   overflow: auto;
 }
 
 
-thead,
+ thead,
 tbody tr {
   display: table;
   width: 100%;
