@@ -39,16 +39,15 @@ def processAuthors():
 			
 		return jsonify(result)
 	else:
-		authors = helper.getAllAuthorsData(None)
+		authors = helper.getAllAuthorsData()
 		return jsonify(authors)
 		
 		
 
 #Get Author By email
 @app.route("/author",methods=["GET"])
-def getAuthorUsingEmail():
-	result = helper.getAllAuthorsData(request.args['email'])
-
+def getAuthorUsingCriteria():
+	result = helper.getAllAuthorsData(request.args['email'],request.args["department"])
 	return jsonify(result)
 
 #RemoveAuthor

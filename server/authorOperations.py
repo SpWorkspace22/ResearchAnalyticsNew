@@ -105,7 +105,65 @@ class AuthorOperation:
 		finally:
 			if cursor!=None:
 				cursor.close()
-				
+
+	# Author by Department
+	def getAuthorByDepartment(self,department):
+		cursor = None
+		try:
+			cursor = self.db.cursor()
+
+			authors = []
+		
+			keys = ('author_id','first_name','last_name','email','phone','department_id','depart_name')
+			sql = "select author_id,first_name,last_name,email,phone,a.department_id,department_name  from author a, department d where a.department_id=d.deparment_id and a.department_id=%s"
+			val = (int(department),)
+			
+			cursor.execute(sql,val)
+			gauthor = cursor.fetchall()
+
+			if(gauthor==None):
+				return authors
+
+			for author in gauthor:
+				authors.append(dict(zip(keys,author)))
+			
+			return authors
+			
+		except Exception as e:
+			print(e)
+			return {"status":500,"message":"","Error":"Server Error"}
+		finally:
+			if cursor!=None:
+				cursor.close
+
+	def getAuthorByEmailAndDepartment(self,email,department):
+		cursor = None
+		try:
+			cursor = self.db.cursor()
+
+			authors = []
+		
+			keys = ('author_id','first_name','last_name','email','phone','department_id','depart_name')
+			sql = "select author_id,first_name,last_name,email,phone,a.department_id,department_name  from author a, department d where a.department_id=d.deparment_id and email=%s and a.department_id=%s"
+			val = (email,int(department),)
+			
+			cursor.execute(sql,val)
+			author = cursor.fetchone()
+
+			if(author==None):
+				return authors
+
+			authors.append(dict(zip(keys,author)))
+			
+			return authors
+			
+		except Exception as e:
+			print(e)
+			return {"status":500,"message":"","Error":"Server Error"}
+		finally:
+			if cursor!=None:
+				cursor.close
+
 	# search author by id
 	def getAuthorById(self,email):
 		cursor = None

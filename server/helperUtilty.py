@@ -109,17 +109,21 @@ class HelperUtility:
 		
 		
 		
-	def getAllAuthorsData(self,email):
+	def getAllAuthorsData(self,email="",department=""):
 	
 		allAuthorsData = []
 		
 		try:
 			authors = None
 			
-			if email==None :
-				authors = self.authorOp.getAllAuthors()
-			else:
+			if email!="" and department!="" and department!="-1":
+				authors = self.authorOp.getAuthorByEmailAndDepartment(email,department)
+			elif email!="" :
 				authors = self.authorOp.getAuthorByEmail(email)
+			elif department!="" and department!="-1":
+				authors = self.authorOp.getAuthorByDepartment(department)
+			else:
+				authors = self.authorOp.getAllAuthors()
 				
 			if(authors==[]):
 				return []

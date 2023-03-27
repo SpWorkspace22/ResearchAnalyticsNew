@@ -6,12 +6,26 @@ import React, { useEffect, useState } from 'react';
 
 export default function AuthorsList({onEditPopulateForm})
     {
-    const [email,setEmail] = useState("");
+    const [searchCriteria,setSearchCriteria] = useState({email:"",department:""});
     let [authors,setAuthors] = useState([]);
+	let [departments,setDepartments] = useState([])
     
+	useEffect(()=>{
+        axios.get('http://127.0.0.1:5000/depart',)
+        .then(function (response) {
+            // handle success
+            setDepartments([...response.data])
+        })
+        .catch(function (error) {
+            // handle error
+            console.log(error);
+        })
+    },[])  
+	
     // Refresh List
     function onLoadData(){
-        axios.get('http://127.0.0.1:5000/authors')
+        axios.get('http://127.0.0.1:5000/authors',
+            { params: { email: searchCriteria.email,department:searchCriteria.department } })
         .then(function (response) {
             // handle success
             console.log(response)
@@ -26,8 +40,9 @@ export default function AuthorsList({onEditPopulateForm})
         });
     }
 
-    function findByEmail(userEmail){
-        axios.get('http://127.0.0.1:5000/author',{ params: { email: userEmail } })
+    function findByCriteria(){
+        axios.get('http://127.0.0.1:5000/author',
+            { params: { email: searchCriteria.email,department:searchCriteria.department } })
         .then(function (response) {
             // handle success
             console.log(response)
@@ -41,10 +56,10 @@ export default function AuthorsList({onEditPopulateForm})
     }
     //filter user on current list
     function onSearchClick(e){
-        if(email===""){
+        if(searchCriteria.email==="" && searchCriteria.department===""){
             onLoadData();
         }else{
-            findByEmail(email)
+            findByCriteria()
         }  
     }
 
@@ -72,24 +87,47 @@ export default function AuthorsList({onEditPopulateForm})
         <>
             <div className="ui form small mb-1">
                 <div className="field">
-                    <label>Email</label>
-                    <div className="three fields">
+                    <div className="four fields">
                         <div className="field">
+						    <label>Email</label>
                             <input type="email" name="searchEmail" placeholder="a@gmail.com"
-                            value={email}
-                            onChange={(e)=>{setEmail(e.target.value)}}/>
+                            value={searchCriteria.email}
+                            onChange={(e)=>{setSearchCriteria({...searchCriteria,email:e.target.value})}}/>
                         </div>
-                        <div className="field">
-                            <button type="button" className="ui primary button"
-                            onClick={onSearchClick}>Search</button>
-                        </div> 
+						<div className="field">
+							<label>Department</label>
+							<select className="ui fluid dropdown" name="depart" 
+                                onChange={(e)=>{setSearchCriteria({...searchCriteria,department:e.target.value})}}>
+							<option value="-1">Select Department</option>
+                            {
+                                departments.map((department)=>{
+                                    return (
+                                        <option 
+                                            value={department.department_id} 
+											selected={department.department_id===searchCriteria.department?true:false} >
+											
+                                        {department.department_name}
+                                        </option>
+                                    );
+                                })
+                            }
+							</select>
+						</div>
+					</div>
+					<div className="two fields">
+					    <div className="field">
+                            <button type="button" onClick={onSearchClick}
+                            className="ui primary button">
+                               Search
+                            </button>
+                        </div>
                         <div className="field">
                             <button type="button" onClick={onLoadData}
                             className="ui right floated circular icon button">
                                 <i className="sync alternate icon"></i>
                             </button>
-                        </div>                         
-                    </div>
+                        </div>
+					</div>
                 </div>
             </div>
             <table className="ui single selectable green line table attached small mt-3" id="author">
