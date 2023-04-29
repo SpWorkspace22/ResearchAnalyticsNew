@@ -2,8 +2,10 @@ from authorOperations import AuthorOperation
 from platformOperations import PlatFormOperations
 from articleOperation import ArticleOperation
 from googleExtractor import GoogleScholarExtractor 
+from scopusExtractor import ScopusExtractor
 
 from flask import Flask, request, json, jsonify
+
 class HelperUtility:
 
 	authorOp = None
@@ -291,36 +293,50 @@ class HelperUtility:
 	def beginExtract(self):
 		gsExtractor = None
 		cursor = None
+		articleList= []
 		try:
 				
 			cursor = self.db.cursor()
 			
-			sql = "select author_id,platform_code,platform_id from author_platform where platform_code='GS'"
+			platSql  = "select platform_code from platform"
 			
-			cursor.execute(sql)
-			authors = cursor.fetchall()
+			cursor.execute(platSql)
+			platforms = cursor.fetchall()
 			
 			cursor.close()
 			
-			gsExtractor = GoogleScholarExtractor()
-			
-			gsArticleList = gsExtractor.parseData(authors)
-			
-			
-			
-			for gsArticle in gsArticleList:
-				article_id = self.articleOp.getAllArticlesBytitleAuthorName(gsArticle['title'],gsArticle['author_id'],gsArticle['platform_code'])
+			for platform in platforms:
+				
+				sql = "select author_id,platform_code,platform_id from author_platform where platform_code=%s"
+				val = (platform[0],)
+				
+				cursor.execute(sql,val)
+				authors = cursor.fetchall()
+				
+				cursor.close()
+				
+				for author in authors:
+					if author[1]=="GS":
+						gsExtractor = GoogleScholarExtractor()
+						articleList.extend(gsExtractor.parseData(authors))
+					elif author[1]=="SC"
+						scExtractor = ScopusExtractor('f49ed1e336c5427e142de7d264c37e00')
+						articleList.extend(gsExtractor.parseData(authors))
 				
 				
-				if(article_id==None):
-				
-					print("Insert")
-					self.articleOp.saveArticles(gsArticle)
-				else:
-					print("Update")
-					self.articleOp.updateArticles(gsArticle['number_of_citation'],article_id[0])
-				
-			return {"message":"Extraction Completed Successfully"}
+				for gsArticle in gsArticleList:
+					article_id = self.articleOp.getAllArticlesBytitleAuthorName(gsArticle['title'],gsArticle['author_id'],gsArticle['platform_code'])
+					
+					
+					if(article_id==None):
+					
+						print("Insert")
+						self.articleOp.saveArticles(gsArticle)
+					else:
+						print("Update")
+						self.articleOp.updateArticles(gsArticle['number_of_citation'],article_id[0])
+					
+				return {"message":"Extraction Completed Successfully"}
 		except Exception as e:
 			print(e)
 			return {"message":"Extraction Unsuccessfull"}

@@ -18,6 +18,8 @@ use researchanalytics;
 -- author_id int,platform_code varchar(10),  CONSTRAINT art_auth_fk FOREIGN KEY (author_id) REFERENCES author(author_id) ON DELETE CASCADE,
 -- CONSTRAINT art_plat_fk FOREIGN KEY (platform_code) REFERENCES platform(platform_code) ON DELETE CASCADE);
 
+-- ALTER TABLE articles ADD CONSTRAINT `platform_id_fk`   
+-- FOREIGN KEY(platform_code) REFERENCES platform(platform_code) ON UPDATE CASCADE;  
 -- insert into department(department_name) values("MCA");
 -- insert into department(department_name) values("BTECH");
 -- insert into department(department_name) values("MTECH");
