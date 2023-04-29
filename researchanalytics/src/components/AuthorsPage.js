@@ -24,7 +24,9 @@ export default function AuthorsPage(){
     }
 
     function onSubmitAuthor(e){
-        let author = {...authorForm,depart_name:e.target.depart.value}
+        
+        let author = {...authorForm,depart_name:e.target.depart.value,}
+        console.log(author)
         axios.post('http://127.0.0.1:5000/authors', author)
         .then(function (response) {
             setAuthorForm({

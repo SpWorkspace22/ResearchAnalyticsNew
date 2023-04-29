@@ -68,15 +68,15 @@ class ArticleOperation:
 			if cursor!=None:
 				cursor.close()
 
-	def getAllArticlesBytitleAuthorName(self,title,author_id,platform_code):
+	def getAllArticlesBytitleAuthorName(self,title,journal_name,pub_year,author_id,platform_code):
 		cursor = None
 		article = None
 		
 		try:
 			cursor = self.db.cursor()
 		
-			sql = "select article_id from articles where article_name=%s and author_id=%s and platform_code=%s"
-			values = (title,author_id,platform_code)
+			sql = "select article_id from articles where article_name=%s and journal_name=%s and pub_year=%s and author_id=%s and platform_code=%s"
+			values = (title,journal_name,pub_year,author_id,platform_code)
 			
 			cursor.execute(sql,values)
 			

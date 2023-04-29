@@ -26,7 +26,7 @@ export default function ArticleByPlatform({data}) {
             cy="150"
             labelLine={true}
             label={data}
-            outerRadius={120}
+            outerRadius={100}
             fill="#8884d8"
             dataKey="total">
             <LabelList dataKey="platform_code" position='insideLeft' />

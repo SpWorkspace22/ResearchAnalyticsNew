@@ -52,7 +52,7 @@ export default function DashboardComponenet(){
                                         <div class="ui active dimmer">
                                             <div class="ui loader"></div>
                                         </div>}>
-                                        <ArticleByPlatform data={data.artCountByPlatformCode}/>
+                                        <ArticleByPlatform data={data.artCountByPlatformCode} />
                                     </Suspense>
                                 </ResponsiveContainer>
                             </div>

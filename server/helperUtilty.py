@@ -30,7 +30,11 @@ class HelperUtility:
 
 			platform_data = data["platform_data"]
 
+			print(platform_data.items())
+			
 			for platform in platform_data.items():
+				print(platform)
+				
 				if(platform[1]!=""):
 					if (not self.isAuthorPlatformDiff(author[0]['author_id'],platform[0],platform[1])):
 						self.platOp.saveAuthorPlatformData(author[0]['author_id'],platform[0],platform[1])
@@ -44,7 +48,7 @@ class HelperUtility:
 							"status":200,
 							"message": "Author Saved",
 							"Error " : ""} 	
-					break
+					continue
 			else:		
 				result  = {"status":200,"message":"Author Saved","Error":""}
 			
@@ -72,29 +76,26 @@ class HelperUtility:
 				
 				
 				for platform in platform_data.items():
-					if(platform[1]!=""):
-						
 						if(self.platOp.getAuthorPlatformData(data['author_id'],platform[0])!=None):
 							
 							if(not self.isAuthorPlatformDiff(data['author_id'],platform[0],platform[1])):
 								self.platOp.updateAuthorPlatformData(data['author_id'],platform[0],platform[1])
+								print("platform updated")
 							else:
 								result = {
 									"status":200,
-									"message":"Author Updated ",
+									"message":"Author Updated",
 									"Error ": "Author Platform Id and Platform Code combination exists"}
-								break
+							#break
 						else:
-							if(not self.isAuthorPlatformDiff(data['author_id'],platform[0],platform[1])):
-								self.platOp.saveAuthorPlatformData(data['author_id'],platform[0],platform[1])
-							else:
-								result = {
+							#if(not self.isAuthorPlatformDiff(data['author_id'],platform[0],platform[1])):
+							self.platOp.saveAuthorPlatformData(data['author_id'],platform[0],platform[1])
+							#else:
+							result = {
 									"status":200,
 									"message":"Author Updated ",
 									"Error ": "Author Platform Id and Platform Code combination exists"}
-								break
-					else:
-						continue
+						#break
 				else:
 					result = {
 								"status":200,
@@ -305,38 +306,54 @@ class HelperUtility:
 			
 			cursor.close()
 			
+
 			for platform in platforms:
+				
+				cursor = self.db.cursor()
 				
 				sql = "select author_id,platform_code,platform_id from author_platform where platform_code=%s"
 				val = (platform[0],)
+				
 				
 				cursor.execute(sql,val)
 				authors = cursor.fetchall()
 				
 				cursor.close()
 				
-				for author in authors:
-					if author[1]=="GS":
-						gsExtractor = GoogleScholarExtractor()
-						articleList.extend(gsExtractor.parseData(authors))
-					elif author[1]=="SC"
-						scExtractor = ScopusExtractor('f49ed1e336c5427e142de7d264c37e00')
-						articleList.extend(gsExtractor.parseData(authors))
+	
+
+				if platform[0]=="GS":
+					print("Google Extract Start")
+					
+
+					gsExtractor = GoogleScholarExtractor()
+					articleList.extend(gsExtractor.parseData(authors))
+						
+					print("Google Extract Complete")
+					
+				elif platform[0]=="SC":
+					print("Scopus Extract Start")
+						
+					scExtractor = ScopusExtractor('f49ed1e336c5427e142de7d264c37e00')
+					articleList.extend(scExtractor.scanScopus(authors))
+						
+					print("Scopus Extract Complete")
+						
 				
+				print(len(articleList))
 				
-				for gsArticle in gsArticleList:
-					article_id = self.articleOp.getAllArticlesBytitleAuthorName(gsArticle['title'],gsArticle['author_id'],gsArticle['platform_code'])
+
+				for gsArticle in articleList:
+					article_id = self.articleOp.getAllArticlesBytitleAuthorName(gsArticle['title'],gsArticle['journal_name'],gsArticle['pub_year'],gsArticle['author_id'],gsArticle['platform_code'])
 					
 					
 					if(article_id==None):
-					
 						print("Insert")
 						self.articleOp.saveArticles(gsArticle)
 					else:
 						print("Update")
 						self.articleOp.updateArticles(gsArticle['number_of_citation'],article_id[0])
-					
-				return {"message":"Extraction Completed Successfully"}
+			return {"message":"Extraction Completed Successfully"}
 		except Exception as e:
 			print(e)
 			return {"message":"Extraction Unsuccessfull"}

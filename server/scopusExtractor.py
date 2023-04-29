@@ -9,7 +9,7 @@ class ScopusExtractor:
 		self.baseUrl = url = "https://api.elsevier.com/content/search/scopus"
 		
 	def scanScopus(self, authors):
-		
+		articleList = []
 		
 		try:
 		
@@ -17,11 +17,10 @@ class ScopusExtractor:
 			
 				moreRecords = True
 				start = 0
-				articleList = []
-
+				
 				while(moreRecords):
 				
-					param = {'query':'AU-ID ('+author[0]+')','start':start}
+					param = {'query':'AU-ID ('+str(author[2])+')','start':start}
 					response = requests.get(self.baseUrl,headers=self.headers,params=param)
 					
 					searchResults = response.json()['search-results']
@@ -29,14 +28,15 @@ class ScopusExtractor:
 					if searchResults.get('entry') is not None:
 						articleList.extend(self.scanPage(searchResults["entry"],author))
 						start=start+25
-						moreRecords=False
 					else:
-						break
+						moreRecords=False
+						start = 0
 						
-				print(articleList)
+				print(len(articleList))
 		except Exception as err:
 			print(err)
 		
+		return articleList
 	
 	def scanPage(self,entries,author):
 		
