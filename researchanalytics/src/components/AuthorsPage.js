@@ -3,6 +3,7 @@ import AuthorsForm from "./authorsComponent/AuthorForm";
 import AuthorsList from "./authorsComponent/AuthorsList";
 
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 export default function AuthorsPage(){
     let [authorForm,setAuthorForm] = useState({
@@ -17,7 +18,15 @@ export default function AuthorsPage(){
         SC:""
     }
     })
-    
+    const navigate =  useNavigate()
+
+    useEffect(()=>{
+        console.log(localStorage.getItem("status"))
+        if(localStorage.getItem("status")==='false'){
+            navigate("/login")
+        }
+    },[])
+
     //Populate Form with author data
     function onPopulateFormData(author){
         setAuthorForm({...author})

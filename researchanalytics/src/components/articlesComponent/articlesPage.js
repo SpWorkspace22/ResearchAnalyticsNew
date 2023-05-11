@@ -1,11 +1,20 @@
 import { useEffect, useState} from 'react'
 import axios from 'axios';
 import './articlePage.css'
+import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 export default function ArticlesPage(){
     const [pageData,setPageData] = useState({articles:[],article_name:'',platform_code:''});
     let [platforms,setPlatforms] = useState([])
     let [scanStatus,setScanStatus] = useState(false)
+    
+    const navigate =  useNavigate()
+    useEffect(()=>{
+        if(localStorage.getItem("status")==='false'){
+            navigate("/login")
+        }
+    },[])
     
     useEffect(()=>{
         axios.get('http://127.0.0.1:5000/platforms',)
