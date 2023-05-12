@@ -7,7 +7,7 @@ from authorOperations import AuthorOperation
 from departmentOperation import DepartmentOperation
 from platformOperations import PlatFormOperations
 from articleOperation import ArticleOperation
-
+from usersOperations import UserOperations
 from helperUtilty import HelperUtility
 
 
@@ -22,7 +22,27 @@ departOp = None
 platOp =  None
 helper = None
 articleOp = None
+userOp = None
 
+
+
+
+@app.route("/register",methods=["POST"])
+def verifyUser():
+	data = json.loads(request.data)
+	result = userOp.registerUser(data)
+
+	return jsonify(result)
+	
+	
+@app.route("/verify",methods=["POST"])
+def register():
+	data = json.loads(request.data)
+	result = userOp.verifyUser(data)
+
+	return jsonify(result)
+	
+	
 # authors routers 
 
 # Save,Update and Get All Authors
@@ -162,7 +182,7 @@ if __name__ == '__main__':
 		platOp = PlatFormOperations(connection)
 		articleOp = ArticleOperation(connection)
 		helper = HelperUtility(connection)
-		
+		userOp = UserOperations(connection)
 		
 		app.run(debug = True)  
 	except Exception as e:
