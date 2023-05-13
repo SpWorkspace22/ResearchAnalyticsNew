@@ -8,6 +8,7 @@ import ArticlesPage from './components/articlesComponent/articlesPage';
 import SettingsPage from './components/SettingsPage';
 import Login from './components/login';
 import { useEffect } from 'react';
+import Register from './components/register';
 
 export default function App() {
 
@@ -28,6 +29,7 @@ export default function App() {
               <Route path='/article' element={ <ArticlesPage />} />
               <Route path='/setup' element={ <SettingsPage/> } />
               <Route path='/login' element={ <Login/> } />
+              <Route path='/register' element={ <Register/> } />
             </Routes>
           </div>
       </BrowserRouter>

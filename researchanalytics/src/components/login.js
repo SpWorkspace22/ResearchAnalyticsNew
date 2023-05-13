@@ -24,6 +24,10 @@ export default function Login () {
         }
     }
 
+    function goToRegister(){
+        navigate("/register")
+    }
+    
     return(
         <>
         <div class="ui segment centered mt-5 mx-5">
@@ -59,7 +63,7 @@ export default function Login () {
                                     <i class="unlock alternate icon"></i>
                                                 Login
                                 </button>
-                                <button class="ui teal labeled icon button" type="submit">
+                                <button class="ui teal labeled icon button" onClick={goToRegister}>
                                     <i class="signup icon"></i>
                                                 Register
                                 </button>

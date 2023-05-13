@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 export default function Navbar(){
     const navigate = useNavigate()
     const [cookies, setCookie] = useCookies(['isLoggedIn','user']);
+    console.log(cookies.isLoggedIn)
     const [state,setState] = useState(cookies.isLoggedIn)
 
     useEffect(()=>{
