@@ -12,7 +12,6 @@ import { useEffect } from 'react';
 export default function App() {
 
   useEffect(()=>{
-    
     localStorage.setItem("status",(localStorage.getItem("status")==='true'? true : false))
     localStorage.setItem("user",localStorage.getItem("user"))
   },[])

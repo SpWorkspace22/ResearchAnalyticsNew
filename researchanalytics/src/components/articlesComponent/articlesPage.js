@@ -3,15 +3,17 @@ import axios from 'axios';
 import './articlePage.css'
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import {useCookies}  from 'react-cookie';
 
 export default function ArticlesPage(){
     const [pageData,setPageData] = useState({articles:[],article_name:'',platform_code:''});
     let [platforms,setPlatforms] = useState([])
     let [scanStatus,setScanStatus] = useState(false)
-    
+    const [cookies] = useCookies(["isLoggedIn"]);
     const navigate =  useNavigate()
+    
     useEffect(()=>{
-        if(localStorage.getItem("status")==='false'){
+        if(cookies.isLoggedIn==='false'){
             navigate("/login")
         }
     },[])

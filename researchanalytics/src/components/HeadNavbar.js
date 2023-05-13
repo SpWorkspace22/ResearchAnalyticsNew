@@ -1,22 +1,23 @@
-import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import {Link, useNavigate} from 'react-router-dom';
+import {useCookies}  from 'react-cookie';
+import { useEffect, useState } from 'react';
 
 export default function Navbar(){
     const navigate = useNavigate()
-
-    const [state,setState] = useState()
+    const [cookies, setCookie] = useCookies(['isLoggedIn','user']);
+    const [state,setState] = useState(cookies.isLoggedIn)
 
     useEffect(()=>{
-        setState(localStorage.getItem("status")==='true')
-    },[])
-
+        setState(cookies.isLoggedIn)
+    },[cookies.isLoggedIn])
 
     function handleLogout(){
-        localStorage.setItem("status",false)
-        localStorage.setItem("user","")
-        setState(false)
-        navigate("/")
+        setCookie("isLoggedIn",false)
+        setCookie("user","")
+        setState(cookies.isLoggedIn)
+
+        navigate("/login")
     }
 
 
@@ -55,7 +56,7 @@ export default function Navbar(){
                     Articles
                 </Link>
             </a>
-            {state ?
+            {state==='false' ?
                 <div class="right menu">
                     <a className="item">
                         <Link to="/login" >
@@ -68,7 +69,7 @@ export default function Navbar(){
                 <div class="right menu">
                     <div class="ui dropdown item">
                         <a className="nav-link dropdown-toggle" href="#" role="button" id="navbarDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i className="user icon"></i> {localStorage.getItem("user")}
+                            <i className="user icon"></i> {cookies.user}
                         </a>
                         <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
                             <li>

@@ -1,6 +1,7 @@
 import { ResponsiveContainer } from 'recharts';
 import React, { Suspense, useEffect, useState } from "react";
 import axios from "axios";
+import { useNavigate } from 'react-router-dom';
 
 const AuthorByPlatform = React.lazy(()=> import("./chartsComponent/authorByPlatform"));
 const CountSummaryData = React.lazy(()=> import("./chartsComponent/countSummaryData"));
@@ -17,6 +18,8 @@ export default function DashboardComponenet(){
         artCountByDepAndPlat:[]
     })
   
+
+
     useEffect(()=>{
       axios.get('http://127.0.0.1:5000/summary')
       .then((response)=>{

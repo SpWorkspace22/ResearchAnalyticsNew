@@ -1,11 +1,15 @@
 import { useState, useEffect } from "react";
 import AuthorsForm from "./authorsComponent/AuthorForm";
 import AuthorsList from "./authorsComponent/AuthorsList";
+import {useCookies}  from 'react-cookie';
 
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 export default function AuthorsPage(){
+    const navigate =  useNavigate()
+    const [cookies] = useCookies(["isLoggedIn"]);
+
     let [authorForm,setAuthorForm] = useState({
         author_id:"",
         first_name:"",
@@ -18,11 +22,10 @@ export default function AuthorsPage(){
         SC:""
     }
     })
-    const navigate =  useNavigate()
+
 
     useEffect(()=>{
-        console.log(localStorage.getItem("status"))
-        if(localStorage.getItem("status")==='false'){
+        if(cookies.isLoggedIn==='false'){
             navigate("/login")
         }
     },[])
