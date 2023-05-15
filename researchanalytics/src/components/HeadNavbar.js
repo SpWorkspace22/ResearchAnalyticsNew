@@ -6,7 +6,6 @@ import { useEffect, useState } from 'react';
 export default function Navbar(){
     const navigate = useNavigate()
     const [cookies, setCookie] = useCookies(['isLoggedIn','user']);
-    console.log(cookies.isLoggedIn)
     const [state,setState] = useState(cookies.isLoggedIn)
 
     useEffect(()=>{
@@ -17,7 +16,6 @@ export default function Navbar(){
         setCookie("isLoggedIn",false)
         setCookie("user","")
         setState(cookies.isLoggedIn)
-
         navigate("/login")
     }
 
@@ -57,7 +55,7 @@ export default function Navbar(){
                     Articles
                 </Link>
             </a>
-            {state==='false' ?
+            {state==='false' || state===undefined ?
                 <div class="right menu">
                     <a className="item">
                         <Link to="/login" >

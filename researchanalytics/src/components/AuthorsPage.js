@@ -25,7 +25,7 @@ export default function AuthorsPage(){
 
 
     useEffect(()=>{
-        if(cookies.isLoggedIn==='false'){
+        if(cookies.isLoggedIn==='false' || cookies.isLoggedIn===undefined){
             navigate("/login")
         }
     },[])

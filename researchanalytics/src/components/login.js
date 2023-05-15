@@ -1,8 +1,8 @@
 import { useSelector, useDispatch } from 'react-redux'
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { loginValidate } from "../services/loginService";
 import {useCookies}  from 'react-cookie';
+import axios from 'axios';
 
 export default function Login () {
     const [loginData,setLoginData] = useState({userName:"",password:""})
@@ -13,15 +13,16 @@ export default function Login () {
 
     function submitForm(e){ 
         e.preventDefault();
-        let user = loginValidate(loginData.userName,loginData.password)
-        if(user!==undefined){
-            setCookie("isLoggedIn",true)
-            setCookie("user",user)
-
-            navigate("/")
-        }else{
-            setError("Invalid credential")
-        }
+        let user = {"email":loginData.userName,"password":loginData.password}
+        axios.post('http://127.0.0.1:5000/verify',user).then((res)=>{
+            if(res.data.status===200){
+                setCookie("isLoggedIn",true)
+                setCookie("user",res.data.message)
+                navigate("/")
+            }else{
+                setError("Invalid credential")
+            }
+        })
     }
 
     function goToRegister(){
@@ -29,9 +30,10 @@ export default function Login () {
     }
     
     return(
-        <>
+        <div className='container'>
         <div class="ui segment centered mt-5 mx-5">
             <h1 className='display-4'>User Login</h1>
+            <hr />
             <div class="ui">
                 {error.length>0 ? 
                     <div class="ui icon warning message">
@@ -72,7 +74,7 @@ export default function Login () {
                 </div>
             </div>
         </div>
-        </>
+        </div>
     );
 
 }
