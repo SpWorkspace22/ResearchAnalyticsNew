@@ -18,15 +18,15 @@ class UserOperations:
 				cursor.execute(sql,val)
 				self.db.commit()
 				if(cursor.rowcount>0):
-					result = {"ststua":200,"message":"users registered"}
+					result = {"status":200,"message":"users registered"}
 	
 			else:
-				result = {"ststua":404,"message":"users exists"}
+				result = {"status":404,"message":"users exists"}
 			
 			return result
 		except Exception as e:
 			print(e)
-			result = {"ststua":500,"message":"server error"}
+			result = {"status":500,"message":"server error"}
 			
 			return result
 		finally:
@@ -48,7 +48,7 @@ class UserOperations:
 			
 
 			user = cursor.fetchone()
-			
+			print(user)
 			if user!=None:
 				result = {"status":200,"message":user[0]}
 			else:
