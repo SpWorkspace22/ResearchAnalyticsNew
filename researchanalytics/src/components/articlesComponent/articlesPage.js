@@ -1,6 +1,9 @@
-import { useEffect, useState} from 'react'
+import { useEffect, useState} from 'react';
 import axios from 'axios';
-import './articlePage.css'
+import './articlePage.css';
+
+import {exportAsExcel} from '../../services/exportExcel';
+
 
 export default function ArticlesPage(){
     const [pageData,setPageData] = useState({articles:[],article_name:'',platform_code:''});
@@ -61,6 +64,12 @@ export default function ArticlesPage(){
         setScanStatus(true)
     }
 
+    function handleExportAsExcel(){
+        const headings = [
+            ['Article Id','Article Name','Citation','Journal','Platform','Year']
+        ]
+        exportAsExcel(headings,pageData.articles);
+    }
     return(
         <div className="mt-4 ms-3 me-3">
             <h4 className="ui dividing header text-primary">Search Criteria</h4>
@@ -104,9 +113,20 @@ export default function ArticlesPage(){
                         { scanStatus ? <i class="loading spinner icon"></i>:"" }
                         Scan
                     </button>
+                    <span className='ui header mx-3'>Export Data</span>
+                    <div class="ui buttons">
+                        <button class="ui green button" data-toggle="tooltip" data-placement="left" title="Excel File" 
+                            onClick={handleExportAsExcel}>
+                            <i className="file excel icon"></i>
+                        </button>
+                        <div class="or"></div>
+                        <button class="ui red button" data-toggle="tooltip" data-placement="right" title="Pdf File">
+                            <i className="file pdf icon"></i>
+                        </button>
+                    </div>
                     <button type="button" onClick={handleRefresh}
-                    className="ui olive right floated circular icon button">
-                        <i className="sync alternate icon"></i>
+                        className="ui olive right floated circular icon button">
+                            <i className="sync alternate icon"></i>
                     </button>
                 </div>
             </div>
@@ -139,6 +159,5 @@ export default function ArticlesPage(){
             </tbody>
             </table>
         </div>
-        
     );
 }
