@@ -1,6 +1,7 @@
 import './setupPage.css'
 import {useEffect, useState} from 'react'
 import axios from 'axios'
+import { platformsApi, removePlatformApi } from '../../services/apiFile'
 
 export default function PlatformSetup(){
     let [platformData,setPlatformData] = useState({
@@ -8,7 +9,7 @@ export default function PlatformSetup(){
     })
 
     function loadData(){
-        axios.get("http://127.0.0.1:5000/platforms")
+        axios.get(platformsApi)
         .then((response)=>{
             setPlatformData({...platformData,platforms:response.data})
         })
@@ -18,7 +19,7 @@ export default function PlatformSetup(){
     }
 
     function handleSave(){
-        axios.post("http://127.0.0.1:5000/platforms",
+        axios.post(platformsApi,
             {platform_code:platformData.platform_code,platform_name:platformData.platform_name})
         .then((response)=>{
             alert(response.data.message)
@@ -31,7 +32,7 @@ export default function PlatformSetup(){
     function handleDelete(platform_code){
         let choice = window.confirm("Are sure to delete platform and related record..")
         if(choice){
-            axios.delete("http://127.0.0.1:5000/platforms/remove",
+            axios.delete(removePlatformApi,
             { params: { platform: platform_code } })
             .then((response)=>{
                 console.log(response.data.message)

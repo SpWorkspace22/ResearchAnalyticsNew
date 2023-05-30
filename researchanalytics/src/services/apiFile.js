@@ -1,0 +1,9 @@
+export const platformsApi = "http://127.0.0.1:5000/platforms";
+export const removePlatformApi = "http://127.0.0.1:5000/platforms/remove";
+export const articlesApi = "http://127.0.0.1:5000/articles";
+export const scanApi = "http://127.0.0.1:5000/scan";
+export const departmentsApi = "http://127.0.0.1:5000/depart";
+export const removeDepartmentApi = "http://127.0.0.1:5000/depart/remove";
+export const authorsApi = "http://127.0.0.1:5000/authors";
+export const removeAuthorApi = "http://127.0.0.1:5000/authors/remove";
+export const summaryApi = "http://127.0.0.1:5000/summary";

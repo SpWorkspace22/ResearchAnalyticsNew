@@ -1,5 +1,4 @@
-import * as FileSaver from 'file-saver';
-import { read, utils, writeFile } from 'xlsx';
+import { utils, writeFile } from 'xlsx';
 
 export function exportAsExcel(headings,articles){
         const wb = utils.book_new();

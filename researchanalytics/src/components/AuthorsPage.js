@@ -3,6 +3,7 @@ import AuthorsForm from "./authorsComponent/AuthorForm";
 import AuthorsList from "./authorsComponent/AuthorsList";
 
 import axios from "axios";
+import { authorsApi } from "../services/apiFile";
 
 export default function AuthorsPage(){
     let [authorForm,setAuthorForm] = useState({
@@ -27,7 +28,7 @@ export default function AuthorsPage(){
         
         let author = {...authorForm,depart_name:e.target.depart.value,}
         console.log(author)
-        axios.post('http://127.0.0.1:5000/authors', author)
+        axios.post(authorsApi, author)
         .then(function (response) {
             setAuthorForm({
                 author_id:"",

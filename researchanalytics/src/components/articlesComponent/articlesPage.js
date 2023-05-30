@@ -1,17 +1,17 @@
 import { useEffect, useState} from 'react';
 import axios from 'axios';
 import './articlePage.css';
-
 import {exportAsExcel} from '../../services/exportExcel';
+import { platformsApi,articlesApi,scanApi } from '../../services/apiFile';
 
-
-export default function ArticlesPage(){
+export default function ArticlesPage(department){
     const [pageData,setPageData] = useState({articles:[],article_name:'',platform_code:''});
     let [platforms,setPlatforms] = useState([])
     let [scanStatus,setScanStatus] = useState(false)
     
     useEffect(()=>{
-        axios.get('http://127.0.0.1:5000/platforms',)
+        console.log(platformsApi)
+        axios.get(platformsApi,)
         .then(function (response) {
             // handle success
             setPlatforms([...response.data])
@@ -19,11 +19,11 @@ export default function ArticlesPage(){
         .catch(function (error) {
             // handle error
             console.log(error);
-        })
-    },[])  
-
+        });
+    },[]);
+ 
     function handleRefresh(){
-        axios.get('http://127.0.0.1:5000/articles').then((response)=>{
+        axios.get(articlesApi).then((response)=>{
             setPageData({articles:response.data,article_name:'',platform_code:''})
         }).catch((err)=>{
             console.log(err)
@@ -31,7 +31,7 @@ export default function ArticlesPage(){
     }
 
     function findByFilterCriteria(filterCriteria){
-        axios.get('http://127.0.0.1:5000/articles',{ params: filterCriteria })
+        axios.get(articlesApi,{ params: filterCriteria })
         .then((response)=>{
             setPageData({...pageData,articles:response.data})
         }).catch((err)=>{
@@ -54,7 +54,7 @@ export default function ArticlesPage(){
 	
 	
 	function handleScan(){
-        axios.get('http://127.0.0.1:5000/scan').then((response)=>{
+        axios.get(scanApi).then((response)=>{
             alert(response.data.message)
             setScanStatus(false)
         }).catch((err)=>{
@@ -100,7 +100,29 @@ export default function ArticlesPage(){
                                 })
                             }
                             </select>
-                        </div>                      
+                        </div>
+                        {/* <div className="field">
+                            <label>Departments</label>
+                            <select className="ui fluid dropdown" name="depart"
+                            onChange={(e)=>setPageData({...pageData,depart_id:e.target.value})}>
+                                {
+                                    departments.map((department)=>{
+                                        return (
+                                            <option 
+                                                value={department.department_id} 
+                                                selected={department.department_id===pageData.depart_id?true:false}
+                                            >
+                                            {department.department_name}
+                                            </option>
+                                        );
+                                    })
+                                }
+                            </select>
+                        </div>
+                        <div className="field">
+                            <label>Year</label>
+                            <input type="text" name="year" />
+                        </div>                       */}
                     </div>
                     <button className="ui primary button" onClick={handleSearch}>Search</button>
                 </div>
@@ -113,20 +135,13 @@ export default function ArticlesPage(){
                         { scanStatus ? <i class="loading spinner icon"></i>:"" }
                         Scan
                     </button>
-                    <span className='ui header mx-3'>Export Data</span>
-                    <div class="ui buttons">
-                        <button class="ui green button" data-toggle="tooltip" data-placement="left" title="Excel File" 
-                            onClick={handleExportAsExcel}>
-                            <i className="file excel icon"></i>
-                        </button>
-                        <div class="or"></div>
-                        <button class="ui red button" data-toggle="tooltip" data-placement="right" title="Pdf File">
-                            <i className="file pdf icon"></i>
-                        </button>
-                    </div>
                     <button type="button" onClick={handleRefresh}
                         className="ui olive right floated circular icon button">
                             <i className="sync alternate icon"></i>
+                    </button>
+                    <button class="ui green right floated circular button">
+                    <i class="file excel icon"></i>
+                        Export Data
                     </button>
                 </div>
             </div>

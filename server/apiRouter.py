@@ -1,6 +1,6 @@
 from flask import Flask, request, json, jsonify
 from flask_cors import CORS
-import threading
+from mysql.connector import pooling
 
 from serverSetup import DatabaseSetup
 from authorOperations import AuthorOperation
@@ -151,11 +151,10 @@ if __name__ == '__main__':
 	try:
 		# creating Databse Setup Object 
 		dbSetup = DatabaseSetup()  
-
+		
 		# establishing connection
 		connection = dbSetup.getConnection("localhost",3306,"root","root","researchanalytics") 
-		
-		print(connection)
+
 		# initializing global opjects with eatblished conbnection
 		authorOp = AuthorOperation(connection) 
 		departOp = DepartmentOperation(connection)

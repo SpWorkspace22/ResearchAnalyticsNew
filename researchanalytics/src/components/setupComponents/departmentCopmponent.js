@@ -1,6 +1,7 @@
 import {useEffect, useState} from 'react'
 import axios from 'axios'
 import './setupPage.css'
+import { departmentsApi, removeDepartmentApi } from '../../services/apiFile'
 
 export default function DepartMentSetup(){
     let [departmentData,setDepartmentData] = useState({
@@ -9,7 +10,7 @@ export default function DepartMentSetup(){
 
 
     function loadData(){
-        axios.get("http://127.0.0.1:5000/depart")
+        axios.get(departmentsApi)
         .then((response)=>{
             setDepartmentData({...departmentData,departments:response.data})
         })
@@ -19,7 +20,7 @@ export default function DepartMentSetup(){
     }
 
     function handleSave(){
-        axios.post("http://127.0.0.1:5000/depart",
+        axios.post(departmentsApi,
                 {depart_name:departmentData.departmentName})
         .then((response)=>{
             alert(response.data.message)
@@ -36,7 +37,7 @@ export default function DepartMentSetup(){
     function handleDelete(department_id){
         let choice = window.confirm("Are you sure to remove department and related record")
         if(choice){
-            axios.delete("http://127.0.0.1:5000/depart/remove",
+            axios.delete(removeDepartmentApi,
             { params: { department: department_id } })
             .then((response)=>{
                 alert(response.data.message)

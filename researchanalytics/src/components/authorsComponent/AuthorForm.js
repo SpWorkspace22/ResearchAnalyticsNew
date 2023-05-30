@@ -1,18 +1,18 @@
 import axios
  from "axios";
 import { useEffect, useState } from "react";
+import { departmentsApi } from "../../services/apiFile";
 export default function AuthorsForm({author,onSubmitAuthor,setAuthorForm}){
     let [user,setUser] = useState({...author})
     let [departments,setDepartments] = useState([])
 
-    console.log(author)
     function onFormSubmit(e){
         e.preventDefault();
         onSubmitAuthor(e);
     }
 
     useEffect(()=>{
-        axios.get('http://127.0.0.1:5000/depart',)
+        axios.get(departmentsApi,)
         .then(function (response) {
             // handle success
             setDepartments([...response.data])

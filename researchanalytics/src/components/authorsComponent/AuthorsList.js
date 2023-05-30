@@ -1,3 +1,4 @@
+import { authorsApi, departmentsApi, removeAuthorApi } from "../../services/apiFile";
 import Author from "./Author";
 import "./Author.css"
 import axios from 'axios'
@@ -11,7 +12,7 @@ export default function AuthorsList({onEditPopulateForm})
 	let [departments,setDepartments] = useState([])
     
 	useEffect(()=>{
-        axios.get('http://127.0.0.1:5000/depart',)
+        axios.get(departmentsApi,)
         .then(function (response) {
             // handle success
             setDepartments([...response.data])
@@ -24,7 +25,7 @@ export default function AuthorsList({onEditPopulateForm})
 	
     // Refresh List
     function onLoadData(){
-        axios.get('http://127.0.0.1:5000/authors',
+        axios.get(authorsApi,
             { params: { email: searchCriteria.email,department:searchCriteria.department } })
         .then(function (response) {
             // handle success
@@ -41,7 +42,7 @@ export default function AuthorsList({onEditPopulateForm})
     }
 
     function findByCriteria(){
-        axios.get('http://127.0.0.1:5000/author',
+        axios.get(authorsApi,
             { params: { email: searchCriteria.email,department:searchCriteria.department } })
         .then(function (response) {
             // handle success
@@ -70,7 +71,7 @@ export default function AuthorsList({onEditPopulateForm})
     function onRemoveAuthor(author_id){
        let result = window.confirm("Are you sure, to delete author and related record")
             if(result){
-            axios.delete('http://127.0.0.1:5000/authors/remove',
+            axios.delete(removeAuthorApi,
             { params: { author_id: author_id } })
             .then(function (response) {
                 alert(response.data.message)
