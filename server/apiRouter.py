@@ -66,13 +66,15 @@ def getAllArticles():
 	data = None
 	
 	if(len(args)==0):
-		data = articleOp.getAllArticles()
-	elif('platform_code' in args and 'article_name' in args):
-		data=articleOp.getArtilcesByCodeAndName(args['article_name'],args['platform_code'])
-	elif('platform_code' in args):
-		data=articleOp.getArticlesByCode(args['platform_code'])
+		data = articleOp.getAllArticlesByCriteria({})
 	else:
-		data=articleOp.getArticlesByName(args['article_name'])
+		data = articleOp.getAllArticlesByCriteria(args)
+	# elif('platform_code' in args and 'article_name' in args):
+	# 	data=articleOp.getArtilcesByCodeAndName(args['article_name'],args['platform_code'])
+	# elif('platform_code' in args):
+	# 	data=articleOp.getArticlesByCode(args['platform_code'])
+	# else:
+	# 	data=articleOp.getArticlesByName(args)
 
 	return jsonify(data)
 

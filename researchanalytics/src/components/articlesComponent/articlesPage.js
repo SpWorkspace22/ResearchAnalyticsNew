@@ -3,25 +3,13 @@ import axios from 'axios';
 import './articlePage.css';
 import {exportAsExcel} from '../../services/exportExcel';
 import { platformsApi,articlesApi,scanApi, departmentsApi } from '../../services/apiFile';
-import { loadDepartment } from '../../services/departmentServices';
 
 export default function ArticlesPage(department){
-    const [pageData,setPageData] = useState({articles:[],article_name:'',platform_code:''});
+    let [pageData,setPageData] = useState({articles:[],article_name:'',platform_code:'',department_id:'',year:''});
     let [pageInitialData,setPageInitialData] = useState({platforms:[],departments:[]})
     let [scanStatus,setScanStatus] = useState(false)
     
     useEffect(()=>{
-        // let data = loadDepartment();
-        // console.log(data);
-        // setPlatforms([...data])
-        // axios.get(platformsApi).then(function (response) {
-        //     // handle success
-        //     setPlatforms([...response.data])
-        // }).catch(function (error) {
-        //     // handle error
-        //     console.log(error);
-        // });
-
         async function fetchData(){
             let plat = await axios.get(platformsApi);
             let depart = await axios.get(departmentsApi);
@@ -30,16 +18,11 @@ export default function ArticlesPage(department){
         fetchData().then((res)=>{
             setPageInitialData({platforms:[...res.plat.data],departments:[...res.depart.data]})
         })
-        
-        
     },[]);
  
-
-
-
     function handleRefresh(){
         axios.get(articlesApi).then((response)=>{
-            setPageData({articles:response.data,article_name:'',platform_code:''})
+            setPageData({articles:response.data,article_name:'',platform_code:'',department_id:'',year:''})
         }).catch((err)=>{
             console.log(err)
         });
@@ -55,16 +38,13 @@ export default function ArticlesPage(department){
     }
 
     function handleSearch(){
-        let article_name=pageData.article_name;
-        let platform_code = pageData.platform_code;
+        findByFilterCriteria({
+            article_name:pageData.article_name,platform_code:pageData.platform_code,
+            department_id:pageData.department_id,year:pageData.year});
+    }
 
-        if(article_name!=="" && platform_code!==""){
-            findByFilterCriteria({article_name:pageData.article_name,platform_code:pageData.platform_code})
-        }else if(platform_code!=="" && platform_code!=="-1"){
-            findByFilterCriteria({platform_code:pageData.platform_code})
-        }else{
-            findByFilterCriteria({article_name:pageData.article_name})
-        }
+    function handleClear(){
+        setPageData({...pageData,article_name:'',platform_code:'',department_id:'',year:''})
     }
 	
 	
@@ -81,10 +61,11 @@ export default function ArticlesPage(department){
 
     function handleExportAsExcel(){
         const headings = [
-            ['Article Id','Article Name','Citation','Journal','Platform','Year']
+            ['Article Id','Article Name','Citation','Journal','Platform','Year','Author','Department']
         ]
         exportAsExcel(headings,pageData.articles);
     }
+
     return(
         <div className="mt-4 ms-3 me-3">
             <h4 className="ui dividing header text-primary">Search Criteria</h4>
@@ -99,17 +80,15 @@ export default function ArticlesPage(department){
                         </div>
                         <div className="field">
                             <label>Platform Type</label>
-                            <select className="ui fluid dropdown" name="depart" 
+                            <select className="ui fluid dropdown" name="platform" id="paltform"
                             onChange={(e)=>setPageData({...pageData,platform_code:e.target.value})}>
                                 <option value="-1"></option>
                                 {
                                 pageInitialData.platforms.map((platform)=>{
                                     return (
                                         <option 
-                                            value={platform.platform_code} 
-                                            selected={pageData.platform_code===platform.platform_code?true:false}
-                                        >
-                                        {platform.platform_name.toUpperCase()}
+                                            value={platform.platform_code}>
+                                            {platform.platform_name.toUpperCase()}
                                         </option>
                                     );
                                 })
@@ -118,29 +97,28 @@ export default function ArticlesPage(department){
                         </div>
                         <div className="field">
                             <label>Departments</label>
-                            <select className="ui fluid dropdown" name="depart"
-                            onChange={(e)=>setPageData({...pageData,depart_id:e.target.value})}>
-                                <option value="-1"></option>
+                            <select className="ui fluid dropdown" name="department"  id="department"
+                            onChange={(e)=>setPageData({...pageData,department_id:e.target.value})}>
+                                <option value='-1'></option>
                                 {
-                                   pageInitialData.departments.map((department)=>{
-                                        return (
-                                            <option 
-                                                value={department.department_id} 
-                                                selected={department.department_id===pageData.depart_id?true:false}
-                                            >
-                                            {department.department_name}
-                                            </option>
-                                        );
-                                    })
-                                }
+                                pageInitialData.departments.map((department)=>{
+                                    return (
+                                        <option value={department.department_id}>
+                                                {department.department_name.toUpperCase()}
+                                        </option>
+                                    );
+                                })
+                            }
                             </select>
                         </div>
                         <div className="field">
                             <label>Year</label>
-                            <input type="text" name="year" />
+                            <input type="text" name="year" value={pageData.year} 
+                            onChange={(e)=>setPageData({...pageData,year:e.target.value})}/>
                         </div>                      
                     </div>
                     <button className="ui primary button" onClick={handleSearch}>Search</button>
+                    <button className="ui basic button" onClick={handleClear}>Clear</button>
                 </div>
             </div>
             <hr/>
@@ -165,11 +143,13 @@ export default function ArticlesPage(department){
             <thead>
                 <tr>
                     <th className='one wide'>Article Id</th>
-                    <th className='eight wide'>Article Name</th>
+                    <th className='six wide'>Article Name</th>
                     <th className='two wide'>Journal Name</th>
-                    <th className='one wide'>Published Year</th>
+                    <th className='one wide'>Year</th>
                     <th className='one wide'>Citation</th>
                     <th className='two wide'>Platform</th>
+                    <th className='two wide'>Department</th>
+                    <th className='two wide'>Author</th>
                 </tr>
             </thead>
             <tbody>
@@ -178,11 +158,13 @@ export default function ArticlesPage(department){
                         return (
                             <tr>
                                 <td className='one wide'>{article.Article_Id}</td>
-                                <td className='eight wide'>{article.Article_Name}</td>
+                                <td className='six wide'>{article.Article_Name}</td>
                                 <td className='two wide'>{article.Journal}</td>
                                 <td className='one wide'>{article.Year}</td>
                                 <td className='one wide'>{article.Citation}</td>
                                 <td className='two wide'>{article.Platform.toUpperCase()}</td>
+                                <td className='two wide'>{article.Author_Name}</td>
+                                <td className='two wide'>{article.Department_Name}</td>
                             </tr>
                         );
                     })
