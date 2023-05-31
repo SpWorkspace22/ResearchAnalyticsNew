@@ -1,6 +1,7 @@
 import { ResponsiveContainer } from 'recharts';
 import React, { Suspense, useEffect, useState } from "react";
 import axios from "axios";
+import { summaryApi } from '../services/apiFile';
 
 const AuthorByPlatform = React.lazy(()=> import("./chartsComponent/authorByPlatform"));
 const CountSummaryData = React.lazy(()=> import("./chartsComponent/countSummaryData"));
@@ -19,7 +20,7 @@ export default function DashboardComponenet(){
 
   
     useEffect(()=>{
-      axios.get('http://127.0.0.1:5000/summary')
+      axios.get(summaryApi)
       .then((response)=>{
         console.log(response.data)
         setData(response.data)

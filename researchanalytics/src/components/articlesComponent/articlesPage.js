@@ -2,26 +2,41 @@ import { useEffect, useState} from 'react';
 import axios from 'axios';
 import './articlePage.css';
 import {exportAsExcel} from '../../services/exportExcel';
-import { platformsApi,articlesApi,scanApi } from '../../services/apiFile';
+import { platformsApi,articlesApi,scanApi, departmentsApi } from '../../services/apiFile';
+import { loadDepartment } from '../../services/departmentServices';
 
 export default function ArticlesPage(department){
     const [pageData,setPageData] = useState({articles:[],article_name:'',platform_code:''});
-    let [platforms,setPlatforms] = useState([])
+    let [pageInitialData,setPageInitialData] = useState({platforms:[],departments:[]})
     let [scanStatus,setScanStatus] = useState(false)
     
     useEffect(()=>{
-        console.log(platformsApi)
-        axios.get(platformsApi,)
-        .then(function (response) {
-            // handle success
-            setPlatforms([...response.data])
+        // let data = loadDepartment();
+        // console.log(data);
+        // setPlatforms([...data])
+        // axios.get(platformsApi).then(function (response) {
+        //     // handle success
+        //     setPlatforms([...response.data])
+        // }).catch(function (error) {
+        //     // handle error
+        //     console.log(error);
+        // });
+
+        async function fetchData(){
+            let plat = await axios.get(platformsApi);
+            let depart = await axios.get(departmentsApi);
+            return {plat,depart}
+        }
+        fetchData().then((res)=>{
+            setPageInitialData({platforms:[...res.plat.data],departments:[...res.depart.data]})
         })
-        .catch(function (error) {
-            // handle error
-            console.log(error);
-        });
+        
+        
     },[]);
  
+
+
+
     function handleRefresh(){
         axios.get(articlesApi).then((response)=>{
             setPageData({articles:response.data,article_name:'',platform_code:''})
@@ -33,7 +48,7 @@ export default function ArticlesPage(department){
     function findByFilterCriteria(filterCriteria){
         axios.get(articlesApi,{ params: filterCriteria })
         .then((response)=>{
-            setPageData({...pageData,articles:response.data})
+            setPageData({...pageData,articles:response.data});
         }).catch((err)=>{
             console.log(err)
         })
@@ -88,7 +103,7 @@ export default function ArticlesPage(department){
                             onChange={(e)=>setPageData({...pageData,platform_code:e.target.value})}>
                                 <option value="-1"></option>
                                 {
-                                platforms.map((platform)=>{
+                                pageInitialData.platforms.map((platform)=>{
                                     return (
                                         <option 
                                             value={platform.platform_code} 
@@ -101,12 +116,13 @@ export default function ArticlesPage(department){
                             }
                             </select>
                         </div>
-                        {/* <div className="field">
+                        <div className="field">
                             <label>Departments</label>
                             <select className="ui fluid dropdown" name="depart"
                             onChange={(e)=>setPageData({...pageData,depart_id:e.target.value})}>
+                                <option value="-1"></option>
                                 {
-                                    departments.map((department)=>{
+                                   pageInitialData.departments.map((department)=>{
                                         return (
                                             <option 
                                                 value={department.department_id} 
@@ -122,7 +138,7 @@ export default function ArticlesPage(department){
                         <div className="field">
                             <label>Year</label>
                             <input type="text" name="year" />
-                        </div>                       */}
+                        </div>                      
                     </div>
                     <button className="ui primary button" onClick={handleSearch}>Search</button>
                 </div>
