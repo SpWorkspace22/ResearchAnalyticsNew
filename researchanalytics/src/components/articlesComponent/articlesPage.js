@@ -45,6 +45,7 @@ export default function ArticlesPage(department){
 
     function handleClear(){
         setPageData({...pageData,article_name:'',platform_code:'',department_id:'',year:''})
+        console.log(pageData)
     }
 	
 	
@@ -66,6 +67,7 @@ export default function ArticlesPage(department){
         exportAsExcel(headings,pageData.articles);
     }
 
+
     return(
         <div className="mt-4 ms-3 me-3">
             <h4 className="ui dividing header text-primary">Search Criteria</h4>
@@ -81,30 +83,38 @@ export default function ArticlesPage(department){
                         <div className="field">
                             <label>Platform Type</label>
                             <select className="ui fluid dropdown" name="platform" id="paltform"
+                            value={pageData.platform_code}
                             onChange={(e)=>setPageData({...pageData,platform_code:e.target.value})}>
-                                <option value="-1"></option>
+                                <option value="-1" selected></option>
                                 {
-                                pageInitialData.platforms.map((platform)=>{
-                                    return (
-                                        <option 
-                                            value={platform.platform_code}>
-                                            {platform.platform_name.toUpperCase()}
-                                        </option>
-                                    );
-                                })
+                                    pageInitialData.platforms.map((platform)=>{
+                                        return (
+                                            <option  
+                                                key={platform.platform_code}
+                                                value={platform.platform_code}
+                                                selected={pageData.platform_code===platform.platform_code}>
+                                                {platform.platform_name.toUpperCase()}
+                                            </option>
+                                        );
+                                    })
                             }
                             </select>
                         </div>
                         <div className="field">
                             <label>Departments</label>
                             <select className="ui fluid dropdown" name="department"  id="department"
+                            value={pageData.department_id}
                             onChange={(e)=>setPageData({...pageData,department_id:e.target.value})}>
-                                <option value='-1'></option>
+                                <option value='-1' selected></option>
                                 {
                                 pageInitialData.departments.map((department)=>{
                                     return (
-                                        <option value={department.department_id}>
-                                                {department.department_name.toUpperCase()}
+                                        <option 
+                                                key={department.department_id}
+                                                value={department.department_id}
+                                                selected={department.department_id===pageData.department_id?true:false}>
+                                                {department.department_name.toUpperCase()
+                                                }
                                         </option>
                                     );
                                 })
@@ -156,7 +166,7 @@ export default function ArticlesPage(department){
                 {
                     pageData.articles.map((article)=>{
                         return (
-                            <tr>
+                            <tr key={article.Article_Id}>
                                 <td className='one wide'>{article.Article_Id}</td>
                                 <td className='six wide'>{article.Article_Name}</td>
                                 <td className='two wide'>{article.Journal}</td>
