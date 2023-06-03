@@ -1,11 +1,16 @@
 import { useState, useEffect } from "react";
 import AuthorsForm from "./authorsComponent/AuthorForm";
 import AuthorsList from "./authorsComponent/AuthorsList";
+import {useCookies}  from 'react-cookie';
 
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import { authorsApi } from "../services/apiFile";
 
 export default function AuthorsPage(){
+    const navigate =  useNavigate()
+    const [cookies] = useCookies(["isLoggedIn"]);
+
     let [authorForm,setAuthorForm] = useState({
         author_id:"",
         first_name:"",
@@ -18,7 +23,14 @@ export default function AuthorsPage(){
         SC:""
     }
     })
-    
+
+
+    useEffect(()=>{
+        if(cookies.isLoggedIn==='false' || cookies.isLoggedIn===undefined){
+            navigate("/login")
+        }
+    },[])
+
     //Populate Form with author data
     function onPopulateFormData(author){
         setAuthorForm({...author})

@@ -1,13 +1,22 @@
 import { read, utils, writeFile } from 'xlsx';
 import axios from 'axios';
-
-import { useState } from "react";
+import {useCookies}  from 'react-cookie';
+import { useEffect, useState } from "react";
 import AuthorCheck from "./authorCheck";
 import UploadLog from "./uploadLog";
+import { useNavigate } from 'react-router-dom';
 
 export default function AuthorUpload(){
     const [authorsData,setAuthors] = useState({authors:[],error:""})
     const [response,setResponse] = useState([])
+    const [cookies] = useCookies(["isLoggedIn"]);
+    const navigate = useNavigate()
+    
+    useEffect(()=>{
+        if(cookies.isLoggedIn==='false' || cookies.isLoggedIn===undefined){
+            navigate("/login")
+        }
+    },[])
 
     function handleImport(e){
         const files = e.target.files;

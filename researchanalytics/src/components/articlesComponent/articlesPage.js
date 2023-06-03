@@ -3,11 +3,22 @@ import axios from 'axios';
 import './articlePage.css';
 import {exportAsExcel} from '../../services/exportExcel';
 import { platformsApi,articlesApi,scanApi, departmentsApi } from '../../services/apiFile';
+import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import {useCookies}  from 'react-cookie';
 
 export default function ArticlesPage(department){
     let [pageData,setPageData] = useState({articles:[],article_name:'',platform_code:'',department_id:'',year:''});
     let [pageInitialData,setPageInitialData] = useState({platforms:[],departments:[]})
     let [scanStatus,setScanStatus] = useState(false)
+    const [cookies] = useCookies(["isLoggedIn"]);
+    const navigate =  useNavigate()
+    
+    useEffect(()=>{
+        if(cookies.isLoggedIn==='false' || cookies.isLoggedIn===undefined){
+            navigate("/login")
+        }
+    },[])
     
     useEffect(()=>{
         async function fetchData(){
