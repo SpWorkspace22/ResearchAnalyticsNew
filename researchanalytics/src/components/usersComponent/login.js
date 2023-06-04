@@ -1,8 +1,8 @@
-import { useSelector, useDispatch } from 'react-redux'
-import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import {  useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import {useCookies}  from 'react-cookie';
 import axios from 'axios';
+import { verifyCredential } from '../../services/apiFile';
 
 export default function Login () {
     const [loginData,setLoginData] = useState({userName:"",password:""})
@@ -14,7 +14,7 @@ export default function Login () {
     function submitForm(e){ 
         e.preventDefault();
         let user = {"email":loginData.userName,"password":loginData.password}
-        axios.post('http://127.0.0.1:5000/verify',user).then((res)=>{
+        axios.post(verifyCredential,user).then((res)=>{
             if(res.data.status===200){
                 setCookie("isLoggedIn",true)
                 setCookie("user",res.data.message)
@@ -29,6 +29,9 @@ export default function Login () {
         navigate("/register")
     }
     
+    function goToResetPassword(){
+        navigate("/resetpassword")
+    }
     return(
         <div className='container'>
         <div class="ui segment centered mt-5 mx-5">
@@ -68,6 +71,10 @@ export default function Login () {
                                 <button class="ui teal labeled icon button" onClick={goToRegister}>
                                     <i class="signup icon"></i>
                                                 Register
+                                </button>
+                                <button class="ui right floated red labeled icon button" onClick={goToResetPassword}>
+                                    <i class="question icon"></i>
+                                        Forgot Password
                                 </button>
                         </form>
                     </div>

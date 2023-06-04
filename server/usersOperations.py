@@ -63,7 +63,35 @@ class UserOperations:
 			if cursor!=None:
 				cursor.close()
 		
-		
+
+	def resetPassword(self,data):
+		result = {}
+		cursor = None
+		try:
+			cursor = self.db.cursor()
+			
+			if(self.isUserExist(data['email'])):
+				sql = "update users set password=%s where email=%s and password=%s"
+				values = (self.encrypt(data['new_pass']),data['email'],self.encrypt(data['old_pass']))
+				
+				cursor.execute(sql,values)
+				self.db.commit()
+				
+				rowcount = cursor.rowcount
+
+				if rowcount > 0:
+					result = {"status":200,"message":"Password Changed"}
+				else:
+					result = {"status":404,"message":"Invalid Credential"}
+			else:
+				result = {"status":404,"message":"Invalid User"}
+			return result
+		except Exception as e:
+			print(e)
+		finally:
+			if cursor!=None:
+				cursor.close()
+
 	def isUserExist(self,email):
 		cursor = None
 		try:

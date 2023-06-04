@@ -6,9 +6,10 @@ import AuthorsPage from "./components/AuthorsPage"
 import AuthorUpload from './components/utilityComponents/uploadAuthors';
 import ArticlesPage from './components/articlesComponent/articlesPage';
 import SettingsPage from './components/SettingsPage';
-import Login from './components/login';
-import Register from './components/register';
+import Login from './components/usersComponent/login';
+import Register from './components/usersComponent/register';
 import { useEffect } from 'react';
+import ResetPassword from './components/usersComponent/forgotPassword';
 export default function App() {
 
   useEffect(()=>{
@@ -30,6 +31,7 @@ export default function App() {
               <Route path='/setup' element={ <SettingsPage/> } />
               <Route path='/login' element={ <Login/> } />
               <Route path='/register' element={ <Register/> } />
+              <Route path='/resetpassword' element={ <ResetPassword/> } />
             </Routes>
           </div>
       </BrowserRouter>

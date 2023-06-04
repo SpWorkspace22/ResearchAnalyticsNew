@@ -1,21 +1,25 @@
-import axios from "axios";
-import { useState } from "react";
+import { useState } from "react"
+import { resetpassword } from "../../services/apiFile"
+import axios from "axios"
 
-export default function Register(){
-    const [userData,setUserData] =  useState({"user_name":"","email":"","password":"","cfrm_password":""})
+export default function  ResetPassword(){
+    const [userData,setUserData] =  useState({email:"",old_pass:"",new_password:"",cfrm_new_password:""})
     const [message,setMessage] = useState({error:"",success:""})
 
     function handleSubmit(e){
         e.preventDefault()
-        if(!validatePassword(userData.password)){
+        if(!validatePassword(userData.old_pass)){
             setMessage({error:"Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters",success:""})
-        }else if(!validatePassword(userData.cfrm_password)){
+        }
+        else if(!validatePassword(userData.new_password)){
+            setMessage({error:"Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters",success:""})
+        }else if(!validatePassword(userData.cfrm_new_password)){
             setMessage({error:"Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters",success:""})
         }
         else if(!validateCfrmPassword()){
             setMessage({error:"Password Mismatch",success:""})
         }else{
-            register()
+            resetPass()
         }
     }
 
@@ -37,30 +41,29 @@ export default function Register(){
     }
 
     function validateCfrmPassword(){
-        if(userData.password===userData.cfrm_password){
+        if(userData.new_password===userData.cfrm_new_password){
             return true
         }else{
             return false
         }
     }
 
-    function register(){
-        let user = {"user_name":userData.user_name,"email":userData.email,"password":userData.password}
-        axios.post('http://127.0.0.1:5000/register',user).then((res)=>{
-            console.log(res.data)
+    function resetPass(){
+        let user = {"email":userData.email,"old_pass":userData.old_pass,"new_pass":userData.new_password}
+        axios.post(resetpassword,user).then((res)=>{
             if(res.data.status===200){
                 setMessage({error:"",success:res.data.message})
-                setUserData({"user_name":"","email":"","password":"","cfrm_password":""})
+                setUserData({email:"",old_pass:"",new_password:"",cfrm_new_password:""})
             }else if(res.data.status===404){
                 setMessage({error:res.data.message,success:""})
             }
         })
-        console.log(message)
     }
+
     return(
         <div className="container ">
             <div class="ui segment centered mt-5 mx-5" id="register_comp">
-                <h1 class="header">Register User</h1>
+                <h1 class="header">Reset Password</h1>
                 <div class="ui message">
                     <div class="header">
                     Instruction:
@@ -83,13 +86,6 @@ export default function Register(){
 
                 <form class="ui form" onSubmit={(e)=>handleSubmit(e)}>
                     <div class="field">
-                        <label>User Name</label>
-                        <input type="text" placeholder="name" value={userData.user_name} 
-                            onChange={(e)=>{ setUserData({...userData,user_name:e.target.value})}}
-                            required
-                        />
-                    </div>
-                    <div class="field">
                         <label>Email</label>
                         <input type="email" placeholder="abc@gmail.com" 
                             value={userData.email} 
@@ -98,19 +94,28 @@ export default function Register(){
                         />
                     </div>
                     <div class="field">
-                        <label>Password</label>
+                        <label>Old Password</label>
                         <input type="password"  placeholder="password" 
                             // pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
-                            value={userData.password} 
-                            onChange={(e)=>{setUserData({...userData,password:e.target.value})}}
+                            value={userData.old_pass} 
+                            onChange={(e)=>{setUserData({...userData,old_pass:e.target.value})}}
                             required
                         /> 
                     </div>
                     <div class="field">
-                        <label>Confirm Password</label>
+                        <label>New Password</label>
                         <input type="password"  placeholder="password" 
-                            value={userData.cfrm_password} 
-                            onChange={(e)=>{setUserData({...userData,cfrm_password:e.target.value})}}
+                            // pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+                            value={userData.new_password} 
+                            onChange={(e)=>{setUserData({...userData,new_password:e.target.value})}}
+                            required
+                        /> 
+                    </div>
+                    <div class="field">
+                        <label>Confirm New Password</label>
+                        <input type="password"  placeholder="password" 
+                            value={userData.cfrm_new_password} 
+                            onChange={(e)=>{setUserData({...userData,cfrm_new_password:e.target.value})}}
                             required
                         />
                     </div>
@@ -118,5 +123,5 @@ export default function Register(){
                 </form>
             </div>
         </div>
-    );
+    )
 }

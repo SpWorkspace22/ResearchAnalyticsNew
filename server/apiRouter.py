@@ -42,6 +42,13 @@ def register():
 
 	return jsonify(result)
 	
+@app.route("/resetpassword",methods=["POST"])
+def resetPassword():
+	data = json.loads(request.data)
+	result = userOp.resetPassword(data)
+
+	print(result)
+	return jsonify(result)
 	
 # authors routers 
 

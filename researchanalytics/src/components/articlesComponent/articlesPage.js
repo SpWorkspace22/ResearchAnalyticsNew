@@ -72,10 +72,7 @@ export default function ArticlesPage(department){
     }
 
     function handleExportAsExcel(){
-        const headings = [
-            ['Article Id','Article Name','Citation','Journal','Platform','Year','Author','Department']
-        ]
-        exportAsExcel(headings,pageData.articles);
+        exportAsExcel(pageData.articles);
     }
 
 
@@ -154,7 +151,7 @@ export default function ArticlesPage(department){
                         className="ui olive right floated circular icon button">
                             <i className="sync alternate icon"></i>
                     </button>
-                    <button class="ui green right floated circular button">
+                    <button class="ui green right floated circular button" onClick={handleExportAsExcel}>
                     <i class="file excel icon"></i>
                         Export Data
                     </button>

@@ -7,3 +7,6 @@ export const removeDepartmentApi = "http://127.0.0.1:5000/depart/remove";
 export const authorsApi = "http://127.0.0.1:5000/authors";
 export const removeAuthorApi = "http://127.0.0.1:5000/authors/remove";
 export const summaryApi = "http://127.0.0.1:5000/summary";
+export const verifyCredential = "http://127.0.0.1:5000/verify";
+export const registerUser = "http://127.0.0.1:5000/register";
+export const resetpassword = "http://127.0.0.1:5000/resetpassword";
